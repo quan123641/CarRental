@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{shared/layouts/layout}">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/home.css}" />
+  <script type="module" th:src="@{/js/home/home.js}"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    .custom-padding {
+      padding-left: 15rem;
+      /* Padding bên trái */
+      padding-right: 6rem;
+      /* Padding bên phải */
+    }
+
+    .custom-background {
+      background-color: #5f5e5e;
+      /* Màu nền xám */
+    }
+
+    .full-height {
+      height: 500px;
+      /* Chiều cao cố định */
+    }
+
+    .border-black {
+      border: 2px solid black;
+      /* Border đen */
+    }
+
+    /* .image-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        } */
+  </style>
+</head>
+
+<body>
+  <section layout:fragment="content" class="text-center">
+    <div class="flex flex-col">
+      <div class="bg-gray-100 h-full w-screen">
+
+      </div>
+
+      <div class="bg-white h-auto w-screen flex flex-col px-4 py-4">
+        <div class="font-bold text-6xl text-left">My Booking</div>
+
+      </div>
+
+
+
+
+      <div>
+        <!--content Carr-->
+        <div>
+          <!-- Nội dung cho phần tìm kiếm -->
+          <div id="searchContent" class="content">
+            <div class="container-fluid">
+              <!-- Lặp từng cặp booking: ảnh và thông tin -->
+              <div style="max-height: 700px; overflow-y: auto;">
+                <div class="row mb-10">
+                  <!-- Ô ảnh (Carousel) -->
+                  <div class="col-6 full-height bg-white d-flex flex-column align-items-center justify-content-center">
+                    <div id="carouselExampleCaptions" class="carousel slide">
+                      <!-- Indicators -->
+                      <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0"
+                          class="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
+                          aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
+                          aria-label="Slide 3"></button>
+                      </div>
+                      <!-- Slides -->
+                      <div class="carousel-inner">
+                        <div class="carousel-item active">
+                          <img th:src="${carBooking.car.imageLeft}" class="d-block w-100" alt="...">
+                        </div>
+                        <div class="carousel-item">
+                          <img th:src="${carBooking.car.imageRight}" class="d-block w-100" alt="...">
+                        </div>
+                        <div class="carousel-item">
+                          <img th:src="${carBooking.car.imageFront}" class="d-block w-100" alt="...">
+                        </div>
+                      </div>
+                      <!-- Controls -->
+                      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      </button>
+                      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Ô thông tin -->
+                  <div
+                    class="col-6 full-height bg-white border-white text-white d-flex align-items-center justify-content-center">
+                    <div class="container w-100 h-100" style="margin-top: 0px">
+                      <table class="table w-100 h-100 text-2xl">
+                        <thead>
+                          <tr>
+                            <th colspan="2" scope="col" class="text-center align-middle text-4xl text-black">
+                              <span th:text="${carBooking.Car.name}">Nissan Navara
+                                2017</span>
+                            </th>
+                            <th class="text-center font-bold bg-blue-600 text-white">
+                              <button th:if="${carBooking.status == 'progress'}"
+                                class="bg-blue-500 text-white font-bold py-2 px-5 rounded-lg w-full">
+                                Return Off
+                              </button>
+                              <a id="rentNowLink" href="#" class="hidden"></a>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr class="py-1" style="height: 50px;">
+                            <td class="font-bold text-1xl text-left py-1" style="padding-top: 2px;">
+                              From :
+                            </td>
+                            <td class="font-bold text-left py-1">
+                              <div class="flex flex-col items-center">
+                                <span class=" text-1xl">
+                                  <span
+                                    th:text="${#temporals.format(carBooking.booking.startDate, 'dd/MM/yyyy')}">13/02/2022</span>
+                                  -
+                                  <span th:text="${#temporals.format(carBooking.booking.startDate, 'hh:mm a')}">12:00
+                                    PM</span>
+                                </span>
+
+                              </div>
+                            </td>
+                            <td class="py-1">
+
+                              <a th:href="@{/detail/{carId}(carId=${carBooking.Car.id})}" class="d-block">
+                                <button class="bg-blue-500 text-white font-bold py-2 px-5 rounded-lg w-full">
+                                  <!-- Đặt width cho button -->
+                                  View Detail
+                                </button>
+                              </a>
+                            </td>
+
+                          </tr>
+
+                          <tr class="py-1" style="height: 50px;">
+                            <td class="font-bold text-left py-1 text-1xl" style="padding-top: 2px;">
+                              To :
+                            </td>
+                            <td class="font-bold text-left py-1">
+                              <div class="flex flex-col items-center">
+                                <span class=" text-1xl">
+                                  <span
+                                    th:text="${#temporals.format(carBooking.booking.endDate, 'dd/MM/yyyy')}">13/02/2022</span>
+                                  -
+                                  <span th:text="${#temporals.format(carBooking.booking.endDate, 'hh:mm a')}">12:00
+                                    PM</span>
+                                </span>
+
+                              </div>
+                            </td>
+                            <td class="py-1">
+
+                              <a th:href="@{/detail/{carId}(carId=${carBooking.Car.id})}" class="d-block">
+                                <button th:if="${carBooking.status == 'deposit-pending'}"
+                                  class="bg-blue-500 text-white font-bold py-2 px-5 rounded-lg w-full">
+                                  Return Off
+                                </button></a>
+                               
+                            </td>
+
+                          </tr>
+
+                          <tr>
+                            <td class="font-bold text-left">Number of days</td>
+                            <td class="font-bold text-left" th:text="${daysBetween}">0
+                            </td>
+                            <td>
+
+                              <button th:if="${carBooking.status == 'in-progress'}"
+                                class="bg-red-500 text-white font-bold py-2 px-5 rounded-lg w-full">
+                                Discard
+                              </button>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="font-bold text-left">TotalPrice</td>
+                            <td class="font-bold text-left" th:text="${totalPrice}">
+                              900k/day
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="font-bold text-left">Deposit</td>
+                            <td class="font-bold text-left" th:text="${carBooking.Car.deposit}">Cau
+                              Giay,
+                              Ha
+                              Noi</td>
+                          </tr>
+                          <tr>
+                            <td class="font-bold  text-left">Status</td>
+                            <td class=" text-left">
+                              <span th:if="${carBooking.status == 'in-progress'}" class="text-green-500 text-left"
+                                th:text="${carBooking.status}">
+                                Confirm
+                              </span>
+                              <span th:if="${carBooking.status == 'deposit-pending'}" class="text-left text-red-500"
+                                th:text="${carBooking.status}">
+                                In Progress
+                              </span>
+                              <span th:if="${carBooking.status != 'in-progress' and carBooking.status != 'deposit-pending'}"
+                                class="text-blue-500" th:text="${carBooking.status}">
+                                Available
+                              </span>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <!-- Hàng 2 -->
+            </div>
+          </div>
+        </div>
+        <div class="row ps-5 mb-3">
+          <nav>
+            <div class="nav nav-tabs ps-md-5" id="nav-tab" role="tablist">
+              <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
+                type="button" role="tab" aria-controls="nav-home" aria-selected="true">Booking Information</button>
+              <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
+                type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Car Information</button>
+              <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact"
+                type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Payment Information</button>
+            </div>
+          </nav>
+          <div class="tab-content" id="nav-tabContent">
+
+            <!-- Booking Infomation -->
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"
+              tabindex="0">
+              <div class="w-full h-auto bg-gray-100 flex flex-col items-center">
+                <form class="custom-background flex flex-col w-full custom-padding space-y-8 py-5" method="POST"
+                  th:action="@{/viewBookingDetail}" th:object="${carBooking}">
+
+                  <input type="hidden" name="startDateTime" th:value="${carBooking.Booking.startDate}" />
+                  <input type="hidden" name="endDateTime" th:value="${carBooking.Booking.endDate}" />
+                  <input type="hidden" name="address" th:value="${carBooking.Car.address}" />
+                  <div class="font-bold text-4xl text-left">Renter information</div>
+                  <!-- Form input fields -->
+
+                  <div class="grid grid-cols-2 gap-4 w-full">
+                    <div class="mb-4 text-left">
+                      <label class="block text-white font-bold mb-1 text-lg text-left">Full name</label>
+                      <input type="text" class="w-3/4 border rounded py-2 px-3 text-gray-700"
+                        th:field="*{renterFullName}" placeholder="Joe Doe">
+                    </div>
+
+                    <div class="mb-4 text-left">
+                      <label class="block text-white font-bold mb-1 text-lg text-left">Date of birth</label>
+                      <input type="date" th:value="${#dates.format(renterDateOfBirth, 'yyyy-MM-dd')}"
+                        class="w-3/4 border rounded py-2 px-3 text-gray-700">
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-2 gap-4 w-full">
+                    <div class="mb-4 text-left">
+                      <label class="block text-white font-bold mb-1 text-lg text-left">Phone number</label>
+                      <input type="text" th:field="*{renterPhone}" class="w-3/4  border rounded py-2 px-3 text-gray-700"
+                        placeholder="09265654654">
+                    </div>
+
+                    <div class="mb-4 text-left">
+                      <label class="block text-white font-bold mb-1 text-lg text-left">Email renter address</label>
+                      <input th:field="*{renterEmail}" type="text"
+                        class="w-3/4  border rounded py-2 px-3 text-gray-700 text-left" placeholder="tquan@gmail.com">
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-2 gap-4 w-full text-left">
+                    <div class="mb-4 text-left">
+                      <label class="block text-white font-bold mb-1 text-lg text-left">National ID NO.</label>
+                      <input th:field="*{renterNationalId}" type="text"
+                        class="w-3/4  border rounded py-2 px-3 text-gray-700 text-left" placeholder="5646A5A4G68">
+                    </div>
+
+                    <div class="mb-4 text-left">
+                      <label class="block text-white font-bold mb-1 text-lg text-left">Driving license</label>
+                      <input type="text" th:field="*{renterDrivingLicense}"
+                        class="w-3/4  border rounded py-2 px-3 text-gray-700" readonly>
+                    </div>
+                  </div>
+                  <!-- New Address Section -->
+                  <div class="font-bold text-2xl text-left">Address :</div>
+
+
+                  <div class="flex flex-col">
+                    <div class="mb-4 flex-grow text-left">
+                      <label class="block text-white font-bold mb-1 text-lg text-left">City/Province</label>
+                      <select th:field="*{renterCity}" class="w-1/2 border rounded py-2 px-3 text-gray-700">
+                        <option value="">Select City/Province</option>
+                        <option value="Hanoi" th:selected="${renterCity == 'Hanoi'}">Hanoi</option>
+                        <option value="HoChiMinh" th:selected="${renterCity == 'HoChiMinh'}">Ho Chi Minh</option>
+                        <option value="DaNang" th:selected="${renterCity == 'DaNang'}">Da Nang</option>
+                      </select>
+                    </div>
+
+                    <div class="mb-4 flex-grow text-left">
+                      <label class="block text-white font-bold mb-1 text-lg text-left">District</label>
+                      <input type="text" class="w-1/2 border rounded py-2 px-3 text-gray-700 text-left"
+                        placeholder="District">
+                    </div>
+
+                    <div class="mb-4 flex-grow text-left">
+                      <label class="block text-white font-bold mb-1 text-lg text-left">Ward</label>
+                      <input th:field="*{renterStreet}" type="text" class="w-1/2 border rounded py-2 px-3 text-gray-700"
+                        placeholder="Ward">
+                    </div>
+
+                    <div class="mb-4 flex-grow text-left">
+                      <label class="block text-white font-bold mb-1 text-lg text-left">House number,
+                        Street</label>
+                      <input th:field="*{renterHouseNumber}" type="text"
+                        class="w-1/2 border rounded py-2 px-3 text-gray-700" placeholder="House number, Street">
+                    </div>
+                  </div>
+
+
+
+                  <div class="custom-background flex flex-col w-full custom space-y-8 py-5">
+                    <div class="font-bold text-4xl text-left">Driver information</div>
+                    <div class="mb-4 flex items-center">
+                      <input type="checkbox" id="driver-agree" class="mr-2">
+                      <label for="driver-agree" class="text-white font-bold text-lg mb-0"> I agree to the
+                        terms
+                        and conditions</label>
+                    </div>
+                    <!-- Form input fields -->
+
+                    <div class="grid grid-cols-2 gap-4 w-full">
+
+                      <div class="mb-4 text-left">
+                        <label class="block text-white font-bold mb-1 text-lg text-left">Full name</label>
+                        <input th:field="*{driverFullName}" type="text"
+                          class="w-3/4 border rounded py-2 px-3 text-gray-700" placeholder="Joe Doe">
+                      </div>
+
+                      <div class="mb-4 text-left">
+                        <label class="block text-white font-bold mb-1 text-lg text-left">Date of
+                          birth</label>
+                        <input th:field="*{driverDateOfBirth}" type="date"
+                          class="w-3/4  border rounded py-2 px-3 text-gray-700">
+                      </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 w-full">
+                      <div class="mb-4 text-left">
+                        <label class="block text-white font-bold mb-1 text-lg text-left">Phone
+                          number</label>
+                        <input th:field="*{driverPhone}" type="text"
+                          class="w-3/4  border rounded py-2 px-3 text-gray-700" placeholder="09265654654">
+                      </div>
+
+                      <div class="mb-4 text-left">
+                        <label class="block text-white font-bold mb-1 text-lg text-left">Email
+                          address</label>
+                        <input type="text" th:field="*{driverEmail}"
+                          class="w-3/4  border rounded py-2 px-3 text-gray-700 text-left" placeholder="tquan@gmail.com">
+                      </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 w-full text-left">
+                      <div class="mb-4 text-left">
+                        <label class="block text-white font-bold mb-1 text-lg text-left">National ID
+                          NO.</label>
+                        <input th:field="*{driverNationalId}" type="text"
+                          class="w-3/4  border rounded py-2 px-3 text-gray-700 text-left" placeholder="5646A5A4G68">
+                      </div>
+
+                      <div class="mb-4 text-left">
+                        <label class="block text-white font-bold mb-1 text-lg text-left">Driving
+                          license</label>
+                        <input th:field="*{driverDrivingLicense}" type="text"
+                          class="w-3/4  border rounded py-2 px-3 text-gray-700" readonly>
+                      </div>
+                    </div>
+                    <!-- New Address Section -->
+                    <div class="font-bold text-2xl text-left">Address :</div>
+
+
+                    <div class="flex flex-col">
+                      <div class="mb-4 flex-grow text-left">
+                        <label class="block text-white font-bold mb-1 text-lg text-left">City/Province</label>
+                        <select th:field="*{driverCity}" class="w-1/2 border rounded py-2 px-3 text-gray-700">
+                          <option value="">Select City/Province</option>
+                          <option value="Hanoi" th:selected="${renterCity == 'Hanoi'}">Hanoi</option>
+                          <option value="HoChiMinh" th:selected="${renterCity == 'HoChiMinh'}">Ho Chi Minh</option>
+                          <option value="DaNang" th:selected="${renterCity == 'DaNang'}">Da Nang</option>
+                        </select>
+                      </div>
+
+
+                      <div class="mb-4 flex-grow text-left">
+                        <label class="block text-white font-bold mb-1 text-lg text-left">District</label>
+                        <input type="text" class="w-1/2 border rounded py-2 px-3 text-gray-700 text-left"
+                          placeholder="District">
+                      </div>
+
+                      <div class="mb-4 flex-grow text-left">
+                        <label class="block text-white font-bold mb-1 text-lg text-left">Ward</label>
+                        <input th:field="*{driverStreet}" type="text"
+                          class="w-1/2 border rounded py-2 px-3 text-gray-700" placeholder="Ward">
+                      </div>
+
+                      <div class="mb-4 flex-grow text-left">
+                        <label class="block text-white font-bold mb-1 text-lg text-left">House number,
+                          Street</label>
+                        <input th:field="*{driverHouseNumber}" type="text"
+                          class="w-1/2 border rounded py-2 px-3 text-gray-700" placeholder="House number, Street">
+                      </div>
+                    </div>
+
+                    <div class="flex justify-end space-x-4 mt-4">
+                      <div>
+                        <button type="submit" class="bg-blue-500 hover:bg-gray-100 text-black font-bold
+                        py-2 px-7 rounded" style="min-width: 30vh;">Save</button>
+                      </div>
+                      <div>
+                        <button type="button" class="bg-blue-500 hover:bg-gray-100 text-black font-bold
+                        py-2 px-5 rounded " style="min-width: 30vh;">Cancel</button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- Car Infomation -->
+            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+              <div class="container text-start mt-5 ms-5">
+                <div class="container mt-4" style="margin-left: 20px;">
+                  <div class="row row-cols-2 gy-4 gx-1">
+                    <div class="col fw-bold text-start">License Plate : <span
+                        th:text="${carBooking.Car.licensePlate}"></span>
+                    </div>
+                    <div class="col fw-bold text-start">Color :<span th:text="${carBooking.Car.color}"></span></div>
+                    <div class="col fw-bold text-start">Brand Name : <span th:text="${carBooking.Car.brand}"></span>
+                    </div>
+                    <div class="col fw-bold text-start">Model : <span th:text="${carBooking.Car.model}"></span></div>
+                    <div class="col fw-bold text-start">Production year : <span
+                        th:text="${carBooking.Car.productionYear}"></span>
+                    </div>
+                    <div class="col fw-bold text-start">numOfSeats : <span
+                        th:text="${carBooking.Car.numOfSeats}"></span>
+                    </div>
+                    <div class="col fw-bold text-start">Transmission:
+                      <span th:text="${carBooking.Car.transmissionType==1 ? 'Yes' : 'No'}"></span>
+                    </div>
+                    <div class="col fw-bold text-start">Fuel:
+                      <span th:text="${carBooking.Car.fuelType ==1 ? 'Yes' : 'No'}"></span>
+                    </div>
+                    <div class="col fw-bold text-start">Documents : <span
+                        th:text="${carBooking.Car.registrationPaper}"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="container mt-4" style="margin-left: 20px;">
+                  <table class="text-start table table-bordered border-2 border-black"
+                    style="width: 40%; border-color:black">
+                    <thead>
+                      <tr class="table-dark">
+                        <th scope="col" style="width: 10%">No</th>
+                        <th scope="col" style="width: 450px;">Name</th>
+                        <th scope="col" style="width: 45%;">Note</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="table-light">
+                        <td>1</td>
+                        <td>Register paper</td>
+                        <td>
+                          <span
+                            th:text="${carBooking.Car.registrationPaper == 'not verified' ? 'not verified' : 'verified'}"></span>
+
+                        </td>
+                      </tr>
+                      <tr class="table-secondary">
+                        <td>2</td>
+                        <td>Certificate of Insurance</td>
+                        <td>
+                          <span
+                            th:text="${carBooking.Car.certificateOfInspection == 'not verified' ? 'not verified' : 'verified'}"></span>
+                        </td>
+                      </tr>
+                      <tr class="table-light">
+                        <td>3</td>
+                        <td>Insurance</td>
+                        <td>
+                          <span
+                            th:text="${carBooking.Car.insurance == 'not verified' ? 'not verified' : 'verified'}"></span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="ms-3 text-start">Note: Documents will be available for viewing after you've paid the
+                    deposit
+                    to rent.</div>
+                </div>
+                <div class="row row-cols-1">
+                  <div class="col fw-bold fs-5 py-3">Mileage : <span th:text="${carBooking.Car.mileage}"></span></div>
+                  <div class="col fw-bold fs-5 py-3">Fuel consumption : <span
+                      th:text="${carBooking.Car.fuelConsumption}">18
+                      liter/100 km</span></div>
+                  <div class="col fw-bold fs-5 py-3">Address : <span th:text="${carBooking.Car.address}"> </span></div>
+                  <div class="col py-3">Note: Full address will be available after you've paid the deposit to rent.
+                  </div>
+                  <div class="col fs-5 py-3 fw-bold">Description:</div>
+                  <div class="col py-3">
+                    <span th:text="${carBooking.Car.description}"> Lorem ipsum dolor sit amet, consectetur adipisicing
+                      elit, sed do eiusmod tempor incididunt ut labore
+                      et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                      aliquip ex ea commodo consequat.</span>
+                  </div>
+                  <div class="col fs-5 py-3 fw-bold">Additional functions:</div>
+                </div>
+
+                <div class="container fw-bold">
+                  <div class="row">
+                    <!-- Column 1 -->
+                    <div class="col-md-4">
+                      <div class="form-check mb-3 d-flex align-items-center">
+                        <i class="fas fa-bluetooth fa-1x text-blue-500 me-2"></i>
+                        <label class="form-check-label me-3" for="bluetooth">Bluetooth</label>
+                        <input class="form-check-input" type="checkbox" id="bluetooth"
+                          th:checked="${carBooking.Car.functionsBluetooth == 1}">
+                      </div>
+
+                      <div class="form-check mb-3 d-flex align-items-center">
+                        <i class="fas fa-map-marker-alt fa-1x text-red-500 me-2"></i>
+                        <label class="form-check-label me-3" for="gps">GPS</label>
+                        <input class="form-check-input" type="checkbox" id="gps"
+                          th:checked="${carBooking.Car.functionsGPS == 1}">
+                      </div>
+
+                      <div class="form-check mb-3 d-flex align-items-center">
+                        <i class="fas fa-sun fa-1x text-yellow-500 me-2"></i>
+                        <label class="form-check-label me-3" for="camera">Camera</label>
+                        <input class="form-check-input" type="checkbox" id="camera"
+                          th:checked="${carBooking.Car.functionsCamera == 1}">
+                      </div>
+                    </div>
+
+                    <!-- Column 2 -->
+                    <div class="col-md-4">
+                      <div class="form-check mb-3 d-flex align-items-center">
+                        <i class="fas fa-lock fa-1x text-gray-500 me-2"></i>
+                        <label class="form-check-label me-3" for="sunroof">Sun Roof</label>
+                        <input class="form-check-input" type="checkbox" id="sunroof"
+                          th:checked="${carBooking.Car.functionsSunRoof == 1}">
+                      </div>
+
+                      <div class="form-check mb-3 d-flex align-items-center">
+                        <i class="fas fa-lock fa-1x text-gray-500 me-2"></i>
+                        <label class="form-check-label me-3" for="childLock">Child Lock</label>
+                        <input class="form-check-input" type="checkbox" id="childLock"
+                          th:checked="${carBooking.Car.functionsChildLock == 1 ? 'checked' : 'unchecked'}">
+                      </div>
+
+                      <div class="form-check mb-3 d-flex align-items-center">
+                        <i class="fas fa-chair fa-1x text-orange-500 me-2"></i>
+                        <label class="form-check-label me-3" for="childSeat">Child Seat</label>
+                        <input class="form-check-input" type="checkbox" id="childSeat"
+                          th:checked="${carBooking.Car.functionsChildSeat == 1 ? 'checked' : 'unchecked'}">
+                      </div>
+                    </div>
+
+                    <!-- Column 3 -->
+                    <div class="col-md-4">
+                      <div class="form-check mb-3 d-flex align-items-center">
+                        <i class="fas fa-compact-disc fa-1x text-purple-500 me-2"></i>
+                        <input class="form-check-input me-2" type="checkbox" id="dvd"
+                          th:checked="${carBooking.Car.functionsDvd == 1 ? 'checked' : 'unchecked'}">
+                        <label class="form-check-label" for="dvd">DVD</label>
+                      </div>
+
+                      <div class="form-check mb-3 d-flex align-items-center">
+                        <i class="fas fa-usb fa-1x text-teal-500 me-2"></i>
+                        <input class="form-check-input me-2" type="checkbox" id="usb"
+                          th:checked="${carBooking.Car.functionsUSB == 1 ? 'checked' : 'unchecked'}">
+                        <label class="form-check-label" for="usb">USB</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="container mt-5">
+
+                  <div class="font-bold text-2xl text-left"> Term of uses</div>
+                  <div class="row">
+                    <!-- Column 1 -->
+                    <div class="col-md-4">
+                      <div class="form-check mb-1">
+                        <input class="form-check-input me-2 d-inline" type="checkbox" id="noFoodInCar">
+                        <label class="form-check-label d-inline" for="noFoodInCar"
+                          type="${carBooking.Car.noFoodInCar == 1 ? 'checked' : 'unchecked'}">No Food In Car</label>
+                      </div>
+                      <div class="form-check mb-1">
+                        <input class="form-check-input me-2 d-inline" type="checkbox" id="other"
+                          checked="${carBooking.Car.other == 1 ? 'checked' : 'unchecked'}">
+                        <label class="form-check-label d-inline" for="other">Other</label>
+                      </div>
+                    </div>
+
+                    <!-- Column 2 -->
+                    <div class="col-md-4">
+                      <div class="form-check mb-1">
+                        <input class="form-check-input me-2 d-inline" type="checkbox" id="noSmoking"
+                          th:checked="${carBooking.Car.noSmoking == 1 ? 'checked' : 'unchecked'}">
+                        <label class="form-check-label d-inline" for="noSmoking">No Smoking</label>
+                      </div>
+                      <div class="form-check mb-1">
+                        <input class="form-check-input me-2 d-inline" type="checkbox" id="noPet">
+                        <label class="form-check-label" for="noPet"
+                          th:checked="${carBooking.Car.noPet == 1 ? 'checked' : 'unchecked'}">No Pet</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+
+
+              </div>
+            </div>
+            <!-- Tab Conta -->
+            <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
+              <div class="container mt-4 fw-bold ms-3">
+                <div class="container-fluid  w-full-screen">
+                  <div class="text-left pl-20 mt-10">
+
+
+
+                    <!-- My Wallet Radio -->
+                    <div class="form-check mb-3 pl-40" th:if="${paymentMethod == null || paymentMethod == 'wallets'}">
+                      <input class="form-check-input" type="radio" name="paymentMethod" id="walletRadio" value="wallets"
+                        th:checked="${paymentMethod == 'wallets'}">
+                      <label class="form-check-label" for="walletRadio">My Wallet</label>
+                    </div>
+
+                    <!-- Current Balance -->
+                    <div style="padding-left: 50px;" class="mb-3 pl-40" th:if="${paymentMethod == null || paymentMethod == 'wallets'}">
+                      <span class="current-balance text-xs">Current Balance: <span id="walletBalance"
+                          th:text="${wallet}"></span></span>
+                    </div>
+
+                    <div class="mb-3 pl-40" th:if="${paymentMethod == null || paymentMethod == 'wallets'}">
+                      <p id="warningMessage" class="text-red-500 hidden">Your wallet balance is insufficient!</p>
+                    </div>
+
+                    <!-- Cash Radio -->
+                    <div class="form-check mb-1 pl-40" th:if="${paymentMethod == null || paymentMethod == 'cash'}">
+                      <input class="form-check-input" type="radio" name="paymentMethod" id="cashRadio" value="cash"
+                        th:checked="${paymentMethod == 'cash'}">
+                      <label class="form-check-label" for="cashRadio">Cash</label>
+                    </div>
+
+                    <!-- Small text for Cash -->
+                    <div style="padding-left: 50px;" class="mb-3 small-text text-xs pl-40 italic"
+                      th:if="${paymentMethod == null || paymentMethod == 'cash'}">
+                      Our operator will contact you for further instruction
+                    </div>
+
+                    <!-- Bank Transfer Radio -->
+                    <div class="form-check mb-1 pl-40"
+                      th:if="${paymentMethod == null || paymentMethod == 'bankTransfer'}">
+                      <input class="form-check-input" type="radio" name="paymentMethod" id="bankTransferRadio"
+                        value="bankTransfer" th:checked="${paymentMethod == 'bankTransfer'}">
+                      <label class="form-check-label" for="bankTransferRadio">Bank Transfer</label>
+                    </div>
+
+                    <!-- Small text for Bank Transfer -->
+                    <div class="mb-4 small-text text-xs pl-40 italic" style="padding-left: 50px;"
+                      th:if="${paymentMethod == null || paymentMethod == 'bankTransfer'}">
+                      Our operator will contact you for further instruction
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="flex justify-center space-x-4 mt-4">
+                      <div>
+                        <a th:href="@{/search}">
+                          <button type="button"
+                            class="bg-blue-500 hover:bg-gray-100 text-black font-bold py-2 px-7 rounded"
+                            style="min-width: 30vh;">Cancel</button>
+                        </a>
+                      </div>
+
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+        </div>
+
+      </div>
+
+
+
+
+
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- pass date and time to url of button rentnow-->
+
+
+  </section>
+</body>
+
+</html>

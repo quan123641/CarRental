@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{shared/layouts/layout}"
+>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Home</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}"/>
+    <script type="module" th:src="@{/js/home/home.js}"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .balance {
+            color: green;
+            font-size: 24px;
+        }
+        .dialog {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 400px;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+<section layout:fragment="content" class="container my-5">
+    <div class="row mb-3">
+        <div class="col">
+            <a href="#">Home</a> &gt; <a href="#">My Wallet</a>
+        </div>
+    </div>
+    <div class="container mt-4">
+        <h1>My Wallet</h1>
+        <p class="balance">Your current balance: <strong id="currentBalance"><span th:text="${currentUserWallet != null ? currentUserWallet : 0}"></span></strong></p>
+    
+        <form th:action="@{/mywallet}" th:object="${transactionUpdateWalletDTO}" method="post" class="mt-4 border rounded p-4">
+            <h3 class="mb-4 text-center">Wallet Transaction</h3> <!-- Thêm tiêu đề -->
+            <div class="container">
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="amount" class="form-label">Amount</label>
+                        <div th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}" class="text-danger mb-2"></div>
+                        <input id="amount" type="text" th:field="*{amount}" class="form-control" placeholder="Enter the amount" maxlength="50">
+                    </div>
+                </div>
+        
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="type" class="form-label">Type</label>
+                        <div th:if="${#fields.hasErrors('type')}" th:errors="*{type}" class="text-danger mb-2"></div>
+                        <select id="type" th:field="*{type}" class="form-select">
+                            <option value="" disabled selected>Select type</option>
+                            <option value="top-up">Top-up</option>
+                            <option value="withdraw">Withdraw</option>
+                        </select>
+                    </div>
+                </div>
+        
+                <div class="row">
+                    <div class="col d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="reset" class="btn btn-secondary">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        
+        
+    
+        <h2>Transactions</h2>
+        <form class="mb-3" action="/mywallet" method="get">
+            <div class="d-flex mb-2 justify-content-between">
+                <div class="me-2 flex-grow-1">
+                    <label for="from" class="form-label"><strong>From:</strong></label>
+                    <input type="date" id="from" name="from" class="form-control" style="width: 150%; max-width: 600px;">
+                </div>
+                <div class="me-2 flex-grow-1">
+                    <label for="to" class="form-label"><strong>To: </strong></label>
+                    <input type="date" id="to" name="to" class="form-control" style="width: 150%; max-width: 600px;">
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary btn-lg">Search</button>
+            </div>
+            
+        </form>     
+        
+        
+    
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Amount</th>
+                    <th>Type</th>
+                    <th>Date/Time</th>
+                    <th>Booking No</th>
+                    <th>Car Name</th>
+                </tr>
+            </thead>
+            <tbody id="transactionTable">
+                <tr th:each="transaction, stat : ${transactions}">
+                    <td th:text="${stat.index + 1}"></td>
+                    <td th:text="${transaction.amount}"></td>
+                    <td th:text="${transaction.type}"></td>
+                    <td th:text="${#temporals.format(transaction.dateTime, 'MM/dd/yyyy')}">12/12/2022 12:00</td>
+                    <td th:text="${transaction.bookingNo}"></td>
+                    <td th:text="${transaction.carName}"></td>
+                </tr>
+
+            </tbody>
+        </table>
+        <!-- Phân trang -->
+        <div class="card-footer pagination p-3 d-flex justify-content-between align-items-center">
+            <!-- Lựa chọn số lượng bản ghi mỗi trang -->
+            <div class="select-size">
+                <label for="pageSize" class="text-sm font-medium">Page Size:</label>
+                <select id="pageSize" name="pageSize" class="p-2 border rounded-md"
+                        onchange="window.location.href = '/mywallet?page=0&size=' + this.value">
+                    <option th:each="size : ${pageSizes}" th:value="${size}" th:text="${size}"
+                            th:selected="${size == pageSize}"></option>
+                </select>
+            </div>
+            <!-- Thanh phân trang -->
+            <ul class="pagination m-0">
+                <!-- Nút đầu tiên -->
+                <li class="page-item" th:classappend="${page == 0} ? 'disabled' : ''">
+                    <a class="page-link" th:href="@{/mywallet(page=0, size=${pageSize})}">
+                        <i class="fa-solid fa-angle-double-left"></i>
+                    </a>
+                </li>
+                
+                <!-- Các trang ở giữa -->
+                <li class="page-item" th:each="i : ${#numbers.sequence(page - pageLimit < 0 ? 0 : page - pageLimit,  totalPages - 1 - page >= pageLimit ? page + pageLimit  : totalPages - 1)}">
+                    <a class="page-link" th:href="@{/mywallet(page=${i}, size=${pageSize})}" th:text="${i + 1}" th:classappend="${i == page} ? 'active' : ''"></a>
+                </li>
+                
+                <!-- Nút cuối cùng -->
+                <li class="page-item" th:classappend="${page + 1 >= totalPages} ? 'disabled' : ''">
+                    <a class="page-link" th:href="@{/mywallet(page=${totalPages - 1}, size=${pageSize})}">
+                        <i class="fa-solid fa-angle-double-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+        
+    </div>
+    
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+   
+    
+</div>
+    
+</section>
+</body>
+</html>

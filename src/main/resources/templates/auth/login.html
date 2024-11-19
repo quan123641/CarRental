@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{shared/layouts/authLayout}"
+        xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Login - SignUp</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}"/>
+    <script type="module" th:src="@{/js/login/login.js}"></script>
+</head>
+
+<body>
+<section
+        layout:fragment="content"
+        class="min-h-screen bg-1 text-center"
+>
+    <div class="p-4">
+        <div
+                class="d-flex justify-content-between bg-white rounded p-4"
+        >
+        <div th:if="${param.error}" class="error-container">
+            <div class="alert alert-info text-white">User not Present with this Email.Please Register.</div>
+        </div>
+            <!-- Phần đăng nhập -->
+            <form
+                    id="loginForm"
+                    th:action="@{/auth/login}"
+                    method="post"
+                    class="w-100 mx-5 inactive"
+            >
+                <h3 class="text-center fw-bold">
+                    LOG IN USING YOUR ACCOUNT
+                </h3>
+                <div
+                        th:if="${errorMessage}"
+                        class="alert alert-danger text-center"
+                >
+                    <span th:text="${errorMessage}"></span>
+                </div>
+                <div>
+                    <input
+                            type="email"
+                            id="loginEmail"
+                            name="username"
+                            placeholder="Your email address"
+                            class="w-100 p-1 my-3 border border-black"
+                    />
+                </div>
+                <div>
+                    <input
+                            type="password"
+                            id="loginPassword"
+                            name="password"
+                            placeholder="Password"
+                            class="w-100 p-1 my-3 border border-black"
+                    />
+                </div>
+                <div class="my-2 w-100 text-center">
+                    <a
+                            th:href="@{/resetpassword}"
+                            class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover hover-italic"
+                    >Forgot your password?</a
+                    >
+                </div>
+                <div class="my-3 w-100 text-center">
+                    <button
+                            type="submit"
+                            class="btn btn-primary w-75 border border-black py-2"
+                    >
+                        <i class="fa-regular fa-user"></i>
+                        <span class="ms-2">LOG IN</span>
+                    </button>
+                </div>
+            </form>
+
+            <div class="vr"></div>
+
+            <!-- Phần đăng ký -->
+            <form
+                    id="signupForm"
+                    th:action="@{/auth/register}"
+                    method="post"
+                    th:object="${userDTOBase}"
+                    class="w-100 mx-5 inactive"
+            >
+                <h3 class="text-center fw-bold">NOT A MEMBER YET?</h3>
+
+                <!-- Tên người dùng -->
+                <div>
+                    <input
+                            type="text"
+                            id="signupName"
+                            name="name"
+                            placeholder="Your name"
+                            class="w-100 p-1 my-3 border border-black"
+                            th:field="*{name}"
+                    />
+                    <div
+                            th:if="${#fields.hasErrors('name')}"
+                            th:errors="*{name}"
+                            class="text-danger"
+                    ></div>
+                </div>
+
+                <!-- Username -->
+                <div>
+                    <input
+                            type="text"
+                            id="signupUsername"
+                            name="username"
+                            placeholder="Your username"
+                            class="w-100 p-1 my-3 border border-black"
+                            th:field="*{username}"
+                    />
+                    <div
+                            th:if="${#fields.hasErrors('username')}"
+                            th:errors="*{username}"
+                            class="text-danger"
+                    ></div>
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <input
+                            type="email"
+                            id="signupEmail"
+                            name="email"
+                            placeholder="Your email address"
+                            class="w-100 p-1 my-3 border border-black"
+                            th:field="*{email}"
+                    />
+                    <div
+                            th:if="${#fields.hasErrors('email')}"
+                            th:errors="*{email}"
+                            class="text-danger"
+                    ></div>
+                </div>
+
+                <!-- Phone -->
+                <div>
+                    <input
+                            type="text"
+                            id="signupPhone"
+                            name="phone"
+                            placeholder="Your phone number"
+                            class="w-100 p-1 my-3 border border-black"
+                            th:field="*{phone}"
+                    />
+                    <div
+                            th:if="${#fields.hasErrors('phone')}"
+                            th:errors="*{phone}"
+                            class="text-danger"
+                    ></div>
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <input
+                            type="password"
+                            id="signupPassword"
+                            name="password"
+                            placeholder="Password"
+                            class="w-100 p-1 my-3 border border-black"
+                            th:field="*{password}"
+                    />
+                    <div
+                            th:if="${#fields.hasErrors('password')}"
+                            th:errors="*{password}"
+                            class="text-danger"
+                    ></div>
+                </div>
+
+                <!-- Confirm Password -->
+                <div>
+                    <input
+                            type="password"
+                            id="rePassword"
+                            name="rePassword"
+                            placeholder="Confirm Password"
+                            class="w-100 p-1 my-3 border border-black"
+                    />
+                    <div class="text-danger"></div>
+                </div>
+
+                <!-- Role -->
+                <div class="my-3 d-flex justify-content-between">
+                    <div>
+                        <input
+                                type="radio"
+                                id="customer"
+                                name="roleName"
+                                value="CUSTOMER"
+                                class="mx-1"
+                                th:field="*{roleName}"
+                        />
+                        <label for="customer"
+                        >I want to rent a car</label
+                        >
+                    </div>
+                    <div>
+                        <input
+                                type="radio"
+                                id="owner"
+                                name="roleName"
+                                value="OWNER"
+                                class="mx-1"
+                                th:field="*{roleName}"
+                        />
+                        <label for="owner">I am a car owner</label>
+                    </div>
+                </div>
+                <div
+                        th:if="${#fields.hasErrors('roleName')}"
+                        th:errors="*{roleName}"
+                        class="text-danger"
+                ></div>
+                <div class="my-3 d-flex flex-wrap gap-2">
+                    <div>
+                        <input
+                                type="checkbox"
+                                id="agreement"
+                                name="agreement"
+                                class="mx-1"
+                        />
+                        <label for="agreement" >
+                            I have read and agree with the
+                        </label>
+                    </div>
+                    <a
+                            href="/termcondition"
+                            class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover hover-italic"
+                    >
+                        Term and Conditions
+                    </a>
+                </div>
+
+                <!-- Submit -->
+                <div class="my-3">
+                    <button id="sign-up-btn"
+                            type="submit"
+                            class="btn btn-primary w-100 border border-black py-2"
+                    >
+                        <i class="fa-regular fa-user"></i>
+                        <span class="ms-2">SIGN UP</span>
+                    </button>
+                </div>
+            </form>
+
+            <button
+                    title="Close"
+                    id="closeBtn"
+                    type="button"
+                    class="btn h-25"
+            >
+                <i class="fa-regular fa-circle-xmark fs-1"></i>
+            </button>
+        </div>
+    </div>
+</section>
+</body>
+</html>

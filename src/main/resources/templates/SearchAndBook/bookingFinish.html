@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{shared/layouts/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <script type="module" th:src="@{/js/home/home.js}"></script>
+    <style>
+        .border-top-75 {
+
+            border-top: 10px;
+            width: 75%;
+            margin: 0 auto;
+        }
+
+        .table td {
+            border-top: none;
+        }
+
+        .custom-padding {
+            padding-left: 10rem;
+            /* Padding bÃƒÂªn trÃƒÂ¡i */
+            padding-right: 6rem;
+            /* Padding bÃƒÂªn phÃ¡ÂºÂ£i */
+            padding-top: 5px;
+        }
+
+        .custom-background {
+            background-color: #5f5e5e;
+            /* MÃƒ u nÃ¡Â»Ân xÃƒÂ¡m */
+        }
+
+        .full-height {
+            height: 500px;
+            /* ChiÃ¡Â»Âu cao cÃ¡Â»â€˜ Ã„â€˜Ã¡Â»â€¹nh */
+        }
+
+        .border-black {
+            border: 2px solid black;
+            /* Border Ã„â€˜en */
+        }
+
+        /* .image-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        } */
+
+        img {
+            height: 200px;
+            width: 50vw;
+        }
+
+        .step {
+            padding: 10px;
+            border: 2px solid #ccc;
+            text-align: center;
+            flex: 1;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .step.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .step-separator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            font-size: 24px;
+            color: #007bff;
+        }
+
+        .step-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .step-container .step:last-child {
+            margin-right: 0;
+        }
+
+        .padding123 {
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+    </style>
+</head>
+
+<body>
+    <section layout:fragment="content" class="text-center">
+        <div class="flex flex-col">
+            <div class="bg-gray-100 h-full w-screen">
+                <div class="w-full h-12 bg-white text-black flex items-center pl-16">
+                    <a href="/">Home</a> > Book car
+                </div>
+                <div class="w-full h-auto bg-gray-100 flex flex-col items-center text-left">
+                    <form class="custom-background flex flex-col w-full custom-padding space-y-8 py-5 fw-bold">
+                        <h2 class="text-white text-3xl">Books Detail </h2>
+                        <ul class="list-disc ms-4">
+                            <li class="text-white ml-5 my-2">Pick-up location: <span
+                                    th:text="${carBooking.Car.address}"> Trung Kinh, Cau Giay, Hanoi</span></li>
+                            <li class="text-white ml-5 my-2">Pick up date and time:
+                                <span
+                                    th:text="${#temporals.format(carBooking.booking.startDate, 'dd/MM/yyyy')}">13/02/2022</span>
+                                <span th:text="${#temporals.format(carBooking.booking.startDate, 'hh:mm a')}"></span>
+                            </li>
+                            <li class="text-white ml-5 my-2">Return date and time:
+                                <span th:text="${#temporals.format(carBooking.booking.endDate, 'hh:mm a')}"></span>
+                                <span th:text="${#temporals.format(carBooking.booking.endDate, 'dd/MM/yyyy')}"></span>
+                            </li>
+                        </ul>
+                    </form>
+                </div>
+            </div>
+
+            <div class="container mt-4 mb-5">
+                <div class="step-container">
+                    <div class="step ">Step 1: Booking Information</div>
+                    <div class="step-separator">></div>
+                    <div class="step">Step 2: Payment</div>
+                    <div class="step-separator">></div>
+                    <div class="step active">Step 3: Finish</div>
+                </div>
+            </div>
+
+            <div class="container-fluid border-black font-bold">
+                <ul class="list-group list-group-flush text-left ">
+                    <li class="list-group-item border-0 pl-40">You've successfully booked <span
+                            th:text="${carBooking.Car.address}"> </span>
+                        from
+                        <span
+                            th:text="${#temporals.format(carBooking.booking.startDate, 'dd/MM/yyyy')}">13/02/2022</span>
+                        <span th:text="${#temporals.format(carBooking.booking.startDate, 'hh:mm a')}"></span>
+                        to
+                        <span th:text="${#temporals.format(carBooking.booking.endDate, 'hh:mm a')}"></span>
+                        <span th:text="${#temporals.format(carBooking.booking.endDate, 'dd/MM/yyyy')}"></span>.
+                    </li>
+                    <li class="list-group-item border-0 pl-40">Your booking number is: 012345</li>
+                    <li class="list-group-item border-0 pl-40">Our operator will contact you with further guidance about
+                        pickup.</li>
+                </ul>
+                <div class="flex justify-center items-center space-x-7 mb-10">
+                    <div><a href="#" class=" text-blue-500 hover:underline"> Go to homepage</a></div>
+                    <a th:href="@{/search}">
+                        <div><button class="bg-red-100 py-2 px-4 border-black rounded"> Book anther car</button></div>
+                    </a>
+                    <div>
+                        <form th:action="@{/viewBookingDetail}" method="get">
+                            <input type="hidden" name="daysBetween" th:value="${daysBetween}">
+                            <input type="hidden" name="totalPrice" th:value="${totalPrice}">
+                            <button class="bg-blue-300 px-5 py-2 border-black rounded">View Book</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+    </section>
+
+    <script>
+        function changePerPage(delta) {
+            const input = document.getElementById('perPage');
+            let currentValue = parseInt(input.value);
+            input.value = Math.max(1, currentValue + delta); // GiÃ¡Â»â€ºi hÃ¡ÂºÂ¡n tÃ¡Â»â€˜i thiÃ¡Â»Æ’u lÃƒ  1
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

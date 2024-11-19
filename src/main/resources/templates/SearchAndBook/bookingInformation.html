@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{shared/layouts/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <script type="module" th:src="@{/js/home/home.js}"></script>
+    <style>
+        .border-top-75 {
+
+            border-top: 10px;
+            width: 75%;
+            margin: 0 auto;
+        }
+
+        .table td {
+            border-top: none;
+        }
+
+        .custom-padding {
+            padding-left: 10rem;
+            /* Padding bÃƒÂªn trÃƒÂ¡i */
+            padding-right: 6rem;
+            /* Padding bÃƒÂªn phÃ¡ÂºÂ£i */
+            padding-top: 5px;
+        }
+
+        .custom-background {
+            background-color: #5f5e5e;
+            /* MÃƒ u nÃ¡Â»Ân xÃƒÂ¡m */
+        }
+
+        .full-height {
+            height: 500px;
+            /* ChiÃ¡Â»Âu cao cÃ¡Â»â€˜ Ã„â€˜Ã¡Â»â€¹nh */
+        }
+
+        .border-black {
+            border: 2px solid black;
+            /* Border Ã„â€˜en */
+        }
+
+        /* .image-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        } */
+
+        img {
+            height: 200px;
+            width: 50vw;
+        }
+
+        .step {
+            padding: 10px;
+            border: 2px solid #ccc;
+            text-align: center;
+            flex: 1;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .step.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .step-separator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            font-size: 24px;
+            color: #007bff;
+        }
+
+        .step-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .step-container .step:last-child {
+            margin-right: 0;
+        }
+
+        .padding123 {
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+    </style>
+</head>
+
+<body>
+    <section layout:fragment="content" class="text-center">
+        <div class="flex flex-col">
+            <div class="bg-gray-100 h-full w-screen">
+                <div class="w-full h-12 bg-white text-black flex items-center pl-16">
+                    <a href="/">Home</a> > Book car
+                </div>
+                <div class="w-full h-auto bg-gray-100 flex flex-col items-center text-left">
+                    <form class="custom-background flex flex-col w-full custom-padding space-y-8 py-5 fw-bold">
+                        <h2 class="text-white text-3xl">Books Detail </h2>
+                        <ul class="list-disc ms-4">
+                            <li class="text-white ml-5 my-2">Pick-up location
+                                <span th:text="${car.address}">: Trung Kinh, Cau Giay, Hanoi</span>
+
+                            <li class="text-white ml-5 my-2">Pick up date and time:
+                                <span th:text="${#temporals.format(startDateTime, 'dd/MM/yyyy')}">13/02/2022</span> -
+                                <span th:text="${#temporals.format(startDateTime, 'hh:mm a')}">12:00 PM</span>
+                            </li>
+                            <li class="text-white ml-5 my-2">Return date and time:
+                                <span th:text="${#temporals.format(endDateTime, 'dd/MM/yyyy')}">23/02/2022</span> -
+                                <span th:text="${#temporals.format(endDateTime, 'hh:mm a')}">14:00 PM</span>
+                            </li>
+                        </ul>
+                    </form>
+                </div>
+            </div>
+
+            <div class="container mt-4">
+                <div class="step-container">
+                    <div class="step active">Step 1: Booking Information</div>
+                    <div class="step-separator">></div>
+                    <div class="step">Step 2: Payment</div>
+                    <div class="step-separator">></div>
+                    <div class="step">Step 3: Finish</div>
+                </div>
+            </div>
+
+            <div class="container text-center bg-white max-w-full border-black " style="margin-top:50px;">
+                <!-- BÃ¡Â»Â border ngoÃƒ i cÃ¡Â»Â§a cÃƒÂ¡c div, chÃ¡Â»â€° giÃ¡Â»Â¯ border cho bÃ¡ÂºÂ£ng -->
+                <!-- Bá» border ngoÃ i cÃ¡c div, chá»‰ giá»¯ border cho báº£ng -->
+                <div class="row">
+                    <!-- Cá»™t 1: HÃ¬nh áº£nh -->
+                    <div class="col-12 col-sm-6 mt-4 ">
+                        <div
+                            class="square-column bg-white d-flex flex-column align-items-left justify-content-between h-100">
+                            <div id="carouselExampleCaptions" class="carousel slide " style="margin-left: 5vw;">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active border-l-2 border-l-black">
+                                        <img th:src="${car.imageFront}" class="d-block w-80" style="width:30vw"
+                                            alt="...">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cá»™t 2: Booking Summary -->
+                    <div class="col-12 col-sm-6 mt-4 ">
+                        <div
+                            class="square-column bg-white d-flex flex-column mr-10 align-items-center justify-content-between h-100">
+                            <table class="table w-100 text-xl">
+                                <tr class="font-weight-bold text-left">
+                                    <td colspan="2" class="align-top pb-5">Booking Summary</td>
+                                </tr>
+                                <tr class="font-weight-bold text-right">
+                                    <td class="">Number of days:</td>
+                                    <td class="w-48" th:text="${daysBetween}">15</td>
+                                </tr>
+                                <tr class="font-weight-bold text-right">
+                                    <td>Price per day:</td>
+                                    <td><span th:text="${car.basePrice}">900k/day</span></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Báº£ng giÃ¡ -->
+                <div class="row">
+                    <!-- Cá»™t 1: ThÃ´ng tin chi tiáº¿t -->
+                    <div class="col-12 col-sm-6 mt-4 ">
+                        <div class="square-column bg-white d-flex flex-column align-items-center justify-content-between h-100"
+                            style="margin-left:5vw">
+                            <table class="table w-100 text-2xl mb-0 text-left me-10">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" class="text-left text-2xl" style="border-bottom: none;">
+                                            <span th:text="${car.name}">Nissan
+                                                Navara 2017</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="font-bold border-b-0">Ratings</td>
+                                        <td class="font-bold border-b-0">
+                                            <div class="flex flex-column items-start">
+                                                <span class="text-yellow-400 text-2xl">â˜… â˜… â˜… â˜… â˜…</span>
+                                                <p class="text-gray-400 text-xl mt-2">(no rating yet)</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-bold">No of rides</td>
+                                        <td class="font-bold"><span th:text="${car.numOfSeats}"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-bold">Price</td>
+                                        <td class="font-bold" th:text="${car.basePrice}">900k/day</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-bold">Locations</td>
+                                        <td class="font-bold" th:text="${car.address}">Cau Giay, Ha Noi</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-bold">Status</td>
+                                        <td class="text-blue-500">Available</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Cá»™t 2: Tá»•ng giÃ¡ -->
+                    <div class="col-12 col-sm-6 mt-4 border-l-2 border-l-black border-t-8 border-t-black-300">
+                        <div class="bg-white mr-6">
+                            <table class="table w-100 text-xl">
+                                <tr class="font-weight-bold text-right">
+                                    <td class="p-4 w-3/4 border-t">Total:</td>
+                                    <td class="p-4 w-3/4" th:text="${totalPrice}">13,500,000 VND</td>
+                                </tr>
+                                <tr class="font-weight-bold text-right">
+                                    <td class="p-4">Deposit:</td>
+                                    <td class="p-4" th:text="${car.deposit}">15,000,000 VND</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!--fom infomation-->
+                <div class="w-full h-auto bg-gray-100 flex flex-col items-center">
+                    <form id="bookingForm" class="custom-background flex flex-col w-full custom-padding space-y-8 py-5" method="POST"
+                        th:action="@{/bookingPayment}" th:object="${carBooking}">
+
+                        <input type="hidden" name="carId" th:value="${carId}" />
+                        <input type="hidden" name="startDateTime" th:value="${startDateTimeStr}" />
+                        <input type="hidden" name="endDateTime" th:value="${endDateTimeStr}" />
+                        <input type="hidden" name="totalPrice" th:value="${totalPrice}" />
+                        <input type="hidden" name="daysBetween" th:value="${daysBetween}" />
+                        <div class="font-bold text-4xl text-left">Renter information</div>
+                        <!-- Form input fields -->
+
+                        <div class="grid grid-cols-2 gap-4 w-full">
+                            <div class="mb-4 text-left">
+                                <label class="block text-white font-bold mb-1 text-lg text-left">Full name</label>
+                                <input type="text" class="w-3/4 border rounded py-2 px-3 text-gray-700"
+                                    th:field="*{renterFullName}" placeholder="Joe Doe">
+                            </div>
+
+                            <div class="mb-4 text-left">
+                                <label class="block text-white font-bold mb-1 text-lg text-left">Date of birth</label>
+                                <input type="date" th:field="*{renterDateOfBirth}"
+                                    class="w-3/4  border rounded py-2 px-3 text-gray-700">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 w-full">
+                            <div class="mb-4 text-left">
+                                <label class="block text-white font-bold mb-1 text-lg text-left">Phone number</label>
+                                <input type="text" th:field="*{renterPhone}"
+                                    class="w-3/4  border rounded py-2 px-3 text-gray-700" placeholder="09265654654">
+                            </div>
+
+                            <div class="mb-4 text-left">
+                                <label class="block text-white font-bold mb-1 text-lg text-left">Email address</label>
+                                <input th:field="*{renterEmail}" type="text"
+                                    class="w-3/4  border rounded py-2 px-3 text-gray-700 text-left"
+                                    placeholder="tquan@gmail.com">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 w-full text-left">
+                            <div class="mb-4 text-left">
+                                <label class="block text-white font-bold mb-1 text-lg text-left">National ID NO.</label>
+                                <input th:field="*{renterNationalId}" type="text"
+                                    class="w-3/4  border rounded py-2 px-3 text-gray-700 text-left"
+                                    placeholder="5646A5A4G68">
+                            </div>
+
+                            <div class="mb-4 text-left">
+                                <label class="block text-white font-bold mb-1 text-lg text-left">Driving license</label>
+                                <input type="text" th:field="*{renterDrivingLicense}"
+                                    class="w-3/4  border rounded py-2 px-3 text-gray-700">
+                            </div>
+                        </div>
+                        <!-- New Address Section -->
+                        <div class="font-bold text-2xl text-left">Address :</div>
+
+
+                        <div class="flex flex-col">
+                            <div class="mb-4 flex-grow text-left">
+                                <label class="block text-white font-bold mb-1 text-lg text-left">City/Province</label>
+                                <select th:field="*{renterCity}" class="w-1/2 border rounded py-2 px-3 text-gray-700">
+                                    <option value="">Select City/Province</option>
+                                    <option value="Hanoi">Hanoi</option>
+                                    <option value="HoChiMinh">Ho Chi Minh</option>
+                                    <option value="DaNang">Da Nang</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-4 flex-grow text-left">
+                                <label class="block text-white font-bold mb-1 text-lg text-left">District</label>
+                                <input type="text" class="w-1/2 border rounded py-2 px-3 text-gray-700 text-left"
+                                    placeholder="District">
+                            </div>
+
+                            <div class="mb-4 flex-grow text-left">
+                                <label class="block text-white font-bold mb-1 text-lg text-left">Ward</label>
+                                <input th:field="*{renterStreet}" type="text"
+                                    class="w-1/2 border rounded py-2 px-3 text-gray-700" placeholder="Ward">
+                            </div>
+
+                            <div class="mb-4 flex-grow text-left">
+                                <label class="block text-white font-bold mb-1 text-lg text-left">House number,
+                                    Street</label>
+                                <input th:field="*{renterHouseNumber}" type="text"
+                                    class="w-1/2 border rounded py-2 px-3 text-gray-700"
+                                    placeholder="House number, Street">
+                            </div>
+                        </div>
+
+
+
+                        <div class="custom-background flex flex-col w-full custom-padding space-y-8 py-5"
+                            style="padding-left:0px">
+                            <div class="font-bold text-4xl text-left">Driver information</div>
+                            <div class="mb-4 flex items-center">
+                                <input type="checkbox" id="driver-agree" class="mr-2">
+                                <label for="driver-agree" class="text-white font-bold text-lg mb-0"> I agree to the
+                                    terms
+                                    and conditions</label>
+                            </div>
+                            <!-- Form input fields -->
+
+                            <div class="grid grid-cols-2 gap-4 w-full">
+
+                                <div class="mb-4 text-left">
+                                    <label class="block text-white font-bold mb-1 text-lg text-left">Full name</label>
+                                    <input th:field="*{driverFullName}" type="text"
+                                        class="w-3/4 border rounded py-2 px-3 text-gray-700" placeholder="Joe Doe">
+                                </div>
+
+                                <div class="mb-4 text-left">
+                                    <label class="block text-white font-bold mb-1 text-lg text-left">Date of
+                                        birth</label>
+                                    <input th:field="*{driverDateOfBirth}" type="date"
+                                        class="w-3/4  border rounded py-2 px-3 text-gray-700">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4 w-full">
+                                <div class="mb-4 text-left">
+                                    <label class="block text-white font-bold mb-1 text-lg text-left">Phone
+                                        number</label>
+                                    <input th:field="*{driverPhone}" type="text"
+                                        class="w-3/4  border rounded py-2 px-3 text-gray-700" placeholder="09265654654">
+                                </div>
+
+                                <div class="mb-4 text-left">
+                                    <label class="block text-white font-bold mb-1 text-lg text-left">Email
+                                        address</label>
+                                    <input type="text" th:field="*{driverEmail}"
+                                        class="w-3/4  border rounded py-2 px-3 text-gray-700 text-left"
+                                        placeholder="tquan@gmail.com">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4 w-full text-left">
+                                <div class="mb-4 text-left">
+                                    <label class="block text-white font-bold mb-1 text-lg text-left">National ID
+                                        NO.</label>
+                                    <input th:field="*{driverNationalId}" type="text"
+                                        class="w-3/4  border rounded py-2 px-3 text-gray-700 text-left"
+                                        placeholder="5646A5A4G68">
+                                </div>
+
+                                <div class="mb-4 text-left">
+                                    <label class="block text-white font-bold mb-1 text-lg text-left">Driving
+                                        license</label>
+                                    <input th:field="*{driverDrivingLicense}" type="text"
+                                        class="w-3/4  border rounded py-2 px-3 text-gray-700">
+                                </div>
+                            </div>
+                            <!-- New Address Section -->
+                            <div class="font-bold text-2xl text-left">Address :</div>
+
+
+                            <div class="flex flex-col">
+                                <div class="mb-4 flex-grow text-left">
+                                    <label
+                                        class="block text-white font-bold mb-1 text-lg text-left">City/Province</label>
+                                    <select th:field="*{driverCity}"
+                                        class="w-1/2 border rounded py-2 px-3 text-gray-700">
+                                        <option value="">Select City/Province</option>
+                                        <option value="Hanoi">Hanoi</option>
+                                        <option value="HoChiMinh">Ho Chi Minh</option>
+                                        <option value="DaNang">Da Nang</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-4 flex-grow text-left">
+                                    <label class="block text-white font-bold mb-1 text-lg text-left">District</label>
+                                    <input type="text" class="w-1/2 border rounded py-2 px-3 text-gray-700 text-left"
+                                        placeholder="District">
+                                </div>
+
+                                <div class="mb-4 flex-grow text-left">
+                                    <label class="block text-white font-bold mb-1 text-lg text-left">Ward</label>
+                                    <input th:field="*{driverStreet}" type="text"
+                                        class="w-1/2 border rounded py-2 px-3 text-gray-700" placeholder="Ward">
+                                </div>
+
+                                <div class="mb-4 flex-grow text-left">
+                                    <label class="block text-white font-bold mb-1 text-lg text-left">House number,
+                                        Street</label>
+                                    <input th:field="*{driverPhone}" type="text"
+                                        class="w-1/2 border rounded py-2 px-3 text-gray-700"
+                                        placeholder="House number, Street">
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end space-x-4 mt-4">
+                                <div>
+                                    <button type="submit" class="bg-blue-500 hover:bg-gray-100 text-black font-bold
+                            py-2 px-7 rounded" style="min-width: 30vh;">Next</button>
+                                </div>
+                                <div>
+                                    <button type="button" class="bg-blue-500 hover:bg-gray-100 text-black font-bold
+                            py-2 px-5 rounded " style="min-width: 30vh;">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const forms = document.querySelectorAll("form"); // Chọn tất cả các form
+        
+                forms.forEach(form => {
+                    const requiredFields = [
+                        "renterFullName", "renterDateOfBirth", "renterPhone", "renterEmail",
+                        "renterNationalId", "renterDrivingLicense", "renterCity",
+                        "driverFullName", "driverDateOfBirth", "driverPhone", "driverEmail",
+                        "driverNationalId", "driverDrivingLicense", "driverCity"
+                    ];
+        
+                    form.addEventListener("submit", function (event) {
+                        let isValid = true;
+                        requiredFields.forEach((field) => {
+                            const input = form.querySelector(`[name="${field}"]`);
+                            if (input && !input.value.trim()) {
+                                isValid = false;
+                                input.classList.add("border-red-500");
+                                input.nextElementSibling?.classList.add("text-red-500");
+                            } else if (input) {
+                                input.classList.remove("border-red-500");
+                                input.nextElementSibling?.classList.remove("text-red-500");
+                            }
+                        });
+        
+                        if (!isValid) {
+                            alert("Please fill in all required fields.");
+                            event.preventDefault(); // Ngăn chặn form gửi
+                        }
+                    });
+                });
+            });
+        </script>
+        
+
+
+    </section>
+
+
+    <!-- aaaaaa -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

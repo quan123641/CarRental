@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{shared/layouts/layout}"
+>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Customer Home</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}"/>
+    <script type="module" th:src="@{/js/home/home.js}"></script>
+</head>
+
+<body>
+<section layout:fragment="content" class="text-center">
+    <div
+            class="d-flex justify-content-between align-items-center mx-auto text-light text-center px-4 bg-1"
+    >
+        <div class="col my-4 text-start align-self-start">
+            <h1>Looking for a vehicale?</h1>
+            <label class="fs-1">You're at the right place</label>
+            <label class="fs-5">
+                We have a large selection of locally owned cars
+                available for you to cosse from. Rental plans are
+                customised to suit your needs.
+            </label>
+            <label class="fs-5">
+                With over 300 cars located nationwide we will have
+                something for you.
+            </label>
+        </div>
+        <div class="col align-self-start text-start my-2">
+            <div
+                    class="form-bg border border-dark p-2 rounded shadow py-3 px-5"
+            >
+                <h3>Find the ideal car rental for your trip</h3>
+                <a
+                class="btn btn-primary my-3 w-50 mx-auto d-flex justify-content-center border-dark"
+                th:href="@{/search}"
+            >
+                SEARCH
+            </a>
+            
+            </div>
+        </div>
+        
+    </div>
+    <div class="mx-5 my-3">
+        <h1>Why us?</h1>
+        <div class="row gap-5 my-5" id="why-us-container"></div>
+    </div>
+    <div class="bg-body-secondary p-4">
+        <h1 class="my-3">What people say?</h1>
+        <div class="row row-cols-2" id="people-say-container"></div>
+    </div>
+    <div class="m-4" id="find-us-container">
+        <h1>Where to find us?</h1>
+        <div class="row" id="find-us-row"></div>
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,181 @@
+.edit-car-nav-23r {
+    background-color: #ffffff;
+    margin: 10px 20px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.edit-car-nav-23r a {
+    color: #000000;
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: font-size 0.3s ease, text-decoration 0.3s ease;
+}
+
+.edit-car-nav-23r a:hover {
+    color: blue;
+    font-size: 1.3rem;
+    text-decoration: underline;
+}
+
+.edit-car-container-12s {
+    width: 95%;
+    margin: 0 auto;
+}
+
+.edit-car-container-12s .edit-car-content-sa1 {
+    width: 90%;
+    margin: 2rem auto;
+}
+
+
+.edit-car-content-main {
+    border: 1px solid #000000;
+    margin: 2rem 0;
+    position: relative;
+}
+
+.edit-car-tabs {
+    margin-top: -1.61rem;
+}
+
+.edit-car-tabs button {
+    padding: 0 5px;
+    position: relative;
+    background-color: #ccc;
+}
+
+
+
+.edit-car-tabs button.active {
+    border-bottom: 2px solid white;
+    background-color: #fff;
+}
+
+/*Info*/
+.basic-info-xzc {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    width: 90%;
+    margin: 1rem auto;
+    font-weight: bold;
+}
+.basic-info-doc-zxc {
+    margin: 1rem auto;
+    width: 90%;
+}
+
+/*Detail*/
+
+.detail-123 {
+    width: 90%;
+    margin: 1rem auto;
+}
+
+.mileage-and-fuel-123,
+.address-and-description-123 {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.additional-function-123 {
+    width: 90%;
+}
+
+.additional-function-123 label {
+    font-size: 1.1rem;
+}
+
+.images-comps-123 {
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.image {
+    transition: opacity 0.3s;
+}
+
+.image-container:hover .image {
+    opacity: 0.5;
+}
+
+.delete-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-container:hover .delete-button {
+    display: flex;
+}
+.image-sad1 {
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 10rem;
+
+}
+.img-container-123 {
+    width: 40%;
+    padding: 1rem 0;
+}
+
+.img-container-123 img {
+    width: 100%;
+    height: auto;
+}
+
+.img-container-123 p {
+    font-size: 1.5rem;
+}
+
+.file-upload {
+    width: 100%;
+}
+
+.file-upload label {
+    cursor: pointer; /* Thay đổi con trỏ khi hover lên label */
+}
+
+.file-upload input {
+    display: none; /* Ẩn input file */
+}
+
+/*Pricing*/
+.pricing-123sa {
+    width: 90%;
+    margin: 1rem auto;
+}
+
+.term-of-use-sad2 {
+    width: 90%;
+    margin: 1rem auto;
+    display: flex;
+    gap: 10rem;
+    font-size: 1.2rem;
+}
+
+.term-of-use-sad2 input {
+    margin-right: 1rem;
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title layout:fragment="$(title)">Vaccine Management</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+            integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+    />
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
+            rel="stylesheet"
+    />
+</head>
+
+<body class="flex flex-col min-h-screen">
+<header th:replace="shared/fragments/header:: header"></header>
+
+<main class="flex gap-4 bg-gray-200">
+    <section layout:fragment="content" class="bg-gray-200"></section>
+    <div id="logout-popup" class="logout-popup">
+        <div class="popup-content">
+            <div class="p-2">
+                <h5>Logout</h5>
+                <p>Are you sure you want to logout?</p>
+            </div>
+            <div class="border-top border-black d-flex text-center">
+                <button id="cancel-logout" class="btn col">Cancel</button>
+                <div class="straight-line"></div>
+                <button id="confirm-logout" class="btn col">Ok</button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="shared/fragments/footer:: footer"></footer>
+<script type="module" th:src="@{/js/index.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

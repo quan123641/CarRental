@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{shared/layouts/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Owner Home</title>
+    <link rel="stylesheet" th:href="@{/css/add-car/add-car.css}"/>
+    <script th:src="@{/js/owner/add-car/add-car.js}" type="module"></script>
+</head>
+
+<body>
+<section layout:fragment="content">
+    <div class="edit-car-nav-23r">
+        <div>
+            <a href="">Home</a>
+            <i class="fa-solid fa-chevron-right"></i>
+        </div>
+        <div>
+            <a class="underline text-primary" href="">Add a car</a>
+        </div>
+    </div>
+
+
+    <div>
+        <h1 class="mx-5">Add a car</h1>
+        <form class=edit-car-container-12s enctype="multipart/form-data" id="carForm" method="post"
+              th:action="@{/car/create}" th:object="${carCreateDTO}">
+<!--            <p th:text="${#authentication.principal.username}"></p>-->
+            <input type="hidden" name="email" th:value="${#authentication.principal.username}"/>
+            <div class=" mt-3">
+                <ul class="nav nav-pills justify-content-between step-nav">
+                    <li class="nav-item col">
+                        <a class="nav-link active" data-bs-toggle="pill" href="#step1">Step 1: Basic</a>
+                    </li>
+                    <li class="nav-item col">
+                        <a class="nav-link" data-bs-toggle="pill" href="#step2">Step 2: Details</a>
+                    </li>
+                    <li class="nav-item col">
+                        <a class="nav-link" data-bs-toggle="pill" href="#step3">Step 3: Pricing</a>
+                    </li>
+                    <li class="nav-item col">
+                        <a class="nav-link" data-bs-toggle="pill" href="#step4" id="finish-step">Step 4: Finish</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content mt-4">
+                    <div class="tab-pane fade show active step" id="step1">
+                        <fieldset>
+                            <div class="step-content active">
+                                <p class="text-danger">
+                                    Note: Please check your information carefully, you'll not be able
+                                    to change the basic details of your car, which is based on the registration
+                                    information.
+                                </p>
+
+                                <div class="container">
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="license">License plate: <span
+                                                    class="text-danger">*</span></label>
+                                            <input class="form-control w-100" id="license" th:field="*{licensePlate}"
+                                                   type="text">
+                                            <p class="text-danger" th:errors="*{licensePlate}"
+                                               th:if="${#fields.hasErrors('licensePlate')}"></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="color">Color: <span
+                                                    class="text-danger">*</span></label>
+                                            <select class="form-select" id="color" th:field="*{color}">
+                                                <option value="Black">Black</option>
+                                                <option value="White">White</option>
+                                            </select>
+                                            <p class="text-danger" th:errors="*{color}"
+                                               th:if="${#fields.hasErrors('color')}"></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="brand">Brand name: <span
+                                                    class="text-danger">*</span></label>
+                                            <select class="form-select" id="brand" th:field="*{brand}">
+                                                <option value="Audi">Audi</option>
+                                                <option value="BMW">BMW</option>
+                                            </select>
+                                            <p class="text-danger" th:errors="*{brand}"
+                                               th:if="${#fields.hasErrors('brand')}"></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="model">Model: <span
+                                                    class="text-danger">*</span></label>
+                                            <select class="form-select" id="model" th:field="*{model}">
+                                                <option value="Audi A1">Audi A1</option>
+                                                <option value="BMW X5">BMW X5</option>
+                                            </select>
+                                            <p class="text-danger" th:errors="*{model}"
+                                               th:if="${#fields.hasErrors('model')}"></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="year">Production year: <span
+                                                    class="text-danger">*</span></label>
+                                            <select class="form-select" id="year" th:field="*{productionYear}">
+                                                <option value="2022">2022</option>
+                                                <option value="2023">2023</option>
+                                            </select>
+                                            <p class="text-danger" th:errors="*{productionYear}"
+                                               th:if="${#fields.hasErrors('productionYear')}"></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="seats">No. of seats: <span
+                                                    class="text-danger">*</span></label>
+                                            <select class="form-select" id="seats" th:field="*{numOfSeats}">
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                            <p class="text-danger" th:errors="*{numOfSeats}"
+                                               th:if="${#fields.hasErrors('numOfSeats')}"></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label>Transmission: <span class="text-danger">*</span></label>
+                                            <div>
+                                                <input th:field="*{transmissionType}" type="radio" value=1>
+                                                Automatic
+                                                <input th:field="*{transmissionType}" type="radio" value=0>
+                                                Manual
+                                                <p class="text-danger" th:errors="*{transmissionType}"
+                                                   th:if="${#fields.hasErrors('transmissionType')}"></p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label>Fuel: <span class="text-danger">*</span></label>
+                                            <div>
+                                                <input th:field="*{fuelType}" type="radio" value=1> Gasoline
+                                                <input th:field="*{fuelType}" type="radio" value=0> Diesel
+                                                <p class="text-danger" th:errors="*{fuelType}"
+                                                   th:if="${#fields.hasErrors('fuelType')}"></p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="my-2">
+                                    <p class="fs-4 fw-semibold">Documents</p>
+                                    <div class="row">
+                                        <!-- Registration paper -->
+                                        <div class="col-md-4">
+                                            <div id="container-registration">
+                                                <label class="form-label" for="registrationPaperFile">Registration
+                                                    paper:<span
+                                                            class="text-danger">*</span></label>
+                                                <div class="file-upload bg-white border rounded p-3 text-center">
+                                                    <i class="fa fa-upload fa-2x"></i>
+                                                    <p>Drag and drop <br> OR</p>
+                                                    <p>Select file</p>
+                                                </div>
+                                                <input class="file-input" id="registrationPaperFile"
+                                                       name="registrationPaperFile"
+                                                       type="file">
+                                            </div>
+                                            <p class="text-danger" th:errors="*{registrationPaper}"
+                                               th:if="${#fields.hasErrors('registrationPaper')}"></p>
+                                            <div id="registration-preview"></div>
+                                        </div>
+                                        <!-- Certificate of inspection -->
+                                        <div class="col-md-4">
+                                            <div id="container-inspection">
+                                                <label class="form-label" for="inspection">Certificate of
+                                                    inspection:<span
+                                                            class="text-danger">*</span></label>
+                                                <div class="file-upload bg-white border rounded p-3 text-center">
+                                                    <i class="fa fa-upload fa-2x"></i>
+                                                    <p>Drag and drop <br> OR</p>
+                                                    <p>Select file</p>
+                                                </div>
+                                                <input class="file-input" id="inspection"
+                                                       name="certificateOfInspectionFile"
+                                                       type="file">
+                                            </div>
+                                            <p class="text-danger"
+                                               th:errors="*{certificateOfInspection}"
+                                               th:if="${#fields.hasErrors('certificateOfInspection')}"></p>
+                                            <div id="inspection-preview"></div>
+                                        </div>
+                                        <!-- Insurance -->
+                                        <div class="col-md-4">
+                                            <div id="container-insurance">
+                                                <label class="form-label" for="insurance">Insurance:</label>
+                                                <div class="file-upload  bg-white border rounded p-3 text-center">
+                                                    <i class="fa fa-upload fa-2x"></i>
+                                                    <p>Drag and drop <br> OR</p>
+                                                    <p>Select file</p>
+                                                </div>
+                                                <input class="file-input" id="insurance" name="insuranceFile"
+                                                       type="file">
+                                            </div>
+                                            <p class="text-danger" th:errors="*{insurance}"
+                                               th:if="${#fields.hasErrors('insurance')}"></p>
+                                            <div id="insurance-preview"></div>
+                                        </div>
+                                    </div>
+                                    <p class="text-muted mt-3">File type: doc, docx, pdf, jpg, jpeg, png</p>
+                                </div>
+
+                                <!-- button -->
+                                <div class="btn-group w-25 mx-auto d-flex justify-content-center gap-5">
+                                    <button class="btn cancelBtn" style="border-radius: 5px"
+                                            type="button">Cancel
+                                    </button>
+                                    <button class="btn btn-primary nextBtn" style="border-radius: 5px"
+                                            type="button">Next
+                                    </button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="tab-pane fade step" id="step2">
+                        <!-- <h4>Step 2: Details</h4> -->
+                        <fieldset>
+                            <div class="tab-detail detail">
+                                <div class="detail-123"
+                                >
+                                    <div class="mileage-and-fuel-123">
+                                        <div class="d-flex flex-column fw-bold col">
+                                            <label class="fs-5" for="mileage">Mileage: <span
+                                                    class="text-danger">*</span></label>
+                                            <input id="mileage" th:field="*{mileage}" type="number"/>
+                                            <p class="text-danger" th:errors="*{mileage}"
+                                               th:if="${#fields.hasErrors('mileage')}"></p>
+                                        </div>
+                                        <div class="d-flex flex-column fw-bold col">
+                                            <label class="fs-5" for="fuel-consumption">Fuel consumption: </label>
+                                            <div>
+                                                <input class="w-75" id="fuel-consumption" th:field="*{fuelConsumption}"
+                                                       type="text"/>
+                                                <span> liter/100km</span>
+                                            </div>
+                                            <p class="text-danger" th:errors="*{fuelConsumption}"
+                                               th:if="${#fields.hasErrors('fuelConsumption')}"></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="address-and-description-123">
+                                        <div class="fw-bold col">
+                                            <label class="fs-5" for="address">Address: <span
+                                                    class="text-danger">*</span></label>
+                                            <input class="w-100" id="address"
+                                                   placeholder="Search for an address"
+                                                   th:field="*{address}"
+                                                   type="text"/>
+                                            <p class="text-danger" th:errors="*{address}"
+                                               th:if="${#fields.hasErrors('address')}"></p>
+                                        </div>
+                                        <div class="fw-bold col">
+                                            <label class="fs-5" for="description">Description</label>
+                                            <textarea class='w-100' id="description"
+                                                      rows="10"
+                                                      th:field="*{description}"
+                                            ></textarea>
+                                            <p class="text-danger" th:errors="*{description}"
+                                               th:if="${#fields.hasErrors('description')}"></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="additional-function-123">
+                                        <p class="fs-5 fw-bold">Additional functions:</p>
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <div class="d-flex gap-2 align-items-center">
+                                                    <i class="fa-brands fa-bluetooth"></i>
+                                                    <label for="functionsBluetooth">Bluetooth</label>
+                                                    <input id="functionsBluetooth"
+                                                           th:field="*{functionsBluetooth}"
+                                                           type="checkbox"/>
+                                                </div>
+                                                <div class="d-flex gap-2 align-items-center">
+                                                    <i class="fa-solid fa-map"></i>
+                                                    <label for="functionsGPS">GPS</label>
+                                                    <input id="functionsGPS"
+                                                           th:field="*{functionsGPS}"
+                                                           type="checkbox"/>
+                                                </div>
+                                                <div class="d-flex gap-2 align-items-center">
+                                                    <i class="fa-solid fa-camera"></i>
+                                                    <label for="functionsCamera">Camera</label>
+                                                    <input id="functionsCamera"
+                                                           th:field="*{functionsCamera}"
+                                                           type="checkbox"/>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="d-flex gap-2 align-items-center">
+                                                    <i class="fa-solid fa-sun"></i>
+                                                    <label for="functionsSunRoof">Sun roof</label>
+                                                    <input id="functionsSunRoof"
+                                                           th:field="*{functionsSunRoof}"
+                                                           type="checkbox"/>
+                                                </div>
+                                                <div class="d-flex gap-2 align-items-center">
+                                                    <i class="fa-solid fa-lock-open"></i>
+                                                    <label for="functionsChildLock">Child lock</label>
+                                                    <input id="functionsChildLock"
+                                                           th:field="*{functionsChildLock}"
+                                                           type="checkbox"/>
+                                                </div>
+                                                <div class="d-flex gap-2 align-items-center">
+                                                    <i class="fa-solid fa-child-reaching"></i>
+                                                    <label for="functionsChildSeat">Child seat</label>
+                                                    <input id="functionsChildSeat"
+                                                           th:field="*{functionsChildSeat}"
+                                                           type="checkbox"/>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="d-flex gap-2 align-items-center">
+                                                    <i class="fa-solid fa-compact-disc"></i>
+                                                    <label for="functionsDvd">DVD</label>
+                                                    <input id="functionsDvd"
+                                                           th:field="*{functionsDvd}"
+                                                           type="checkbox"/>
+                                                </div>
+                                                <div class="d-flex gap-2 align-items-center">
+                                                    <i class="fa-brands fa-usb"></i>
+                                                    <label for="functionsUSB">USB</label>
+                                                    <input id="functionsUSB"
+                                                           th:field="*{functionsUSB}"
+                                                           type="checkbox"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="images-comps-123">
+                                        <p class="fs-5 fw-bold">Images: <span class="text-danger">*</span></p>
+                                        <div>
+                                            <div class="image-sad1">
+                                                <div class="img-container-123">
+                                                    <div class="file-upload"
+                                                         id="front-image-container"
+                                                    >
+                                                        <label class="form-label" for="file-upload-front">Front:</label>
+                                                        <div class="file-upload  bg-white border rounded p-3 text-center ">
+                                                            <i class="fa fa-upload fa-2x"></i>
+                                                            <p class="fs-5 mb-0">Drag and drop <br> OR</p>
+                                                            <p class="fs-5 mb-0">Select file</p>
+                                                        </div>
+                                                        <input id="file-upload-front" name="imageFrontFile"
+                                                               type="file"/>
+                                                        <span class="text-red-500" th:errors="*{imageFront}"
+                                                              th:if="${#fields.hasErrors('imageFront')}"></span>
+                                                    </div>
+                                                    <div id="front-image-preview"></div>
+                                                </div>
+
+                                                <!-- Back Image Container -->
+                                                <div class="img-container-123">
+                                                    <div class="file-upload"
+                                                         id="back-image-container"
+                                                    >
+                                                        <label class="form-label" for="file-upload-back">Back:</label>
+                                                        <div class="file-upload  bg-white border rounded p-3 text-center ">
+                                                            <i class="fa fa-upload fa-2x"></i>
+                                                            <p class="fs-5 mb-0">Drag and drop <br> OR</p>
+                                                            <p class="fs-5 mb-0">Select file</p>
+                                                        </div>
+                                                        <input id="file-upload-back" name="imageBackFile" type="file"/>
+                                                        <span class="text-red-500" th:errors="*{imageBack}"
+                                                              th:if="${#fields.hasErrors('imageBack')}"></span>
+                                                    </div>
+                                                    <div id="back-image-preview"></div>
+                                                </div>
+
+                                                <!-- Left Image Container -->
+                                                <div class="img-container-123">
+                                                    <div class="file-upload"
+                                                         id="left-image-container"
+                                                    >
+                                                        <label class="form-label" for="file-upload-left">Left:</label>
+                                                        <div class="file-upload  bg-white border rounded p-3 text-center ">
+                                                            <i class="fa fa-upload fa-2x"></i>
+                                                            <p class="fs-5 mb-0">Drag and drop <br> OR</p>
+                                                            <p class="fs-5 mb-0">Select file</p>
+                                                        </div>
+                                                        <input id="file-upload-left" name="imageLeftFile" type="file"/>
+                                                        <span class="text-red-500" th:errors="*{imageLeft}"
+                                                              th:if="${#fields.hasErrors('imageLeft')}"></span>
+                                                    </div>
+                                                    <div id="left-image-preview"></div>
+                                                </div>
+
+                                                <!-- Right Image Container -->
+                                                <div class="img-container-123">
+                                                    <div class="file-upload"
+                                                         id="right-image-container"
+                                                    >
+                                                        <label class="form-label" for="file-upload-right">Right:</label>
+                                                        <div class="file-upload  bg-white border rounded p-3 text-center ">
+                                                            <i class="fa fa-upload fa-2x"></i>
+                                                            <p class="fs-5 mb-0">Drag and drop <br> OR</p>
+                                                            <p class="fs-5 mb-0">Select file</p>
+                                                        </div>
+                                                        <input id="file-upload-right" name="imageRightFile"
+                                                               type="file"/>
+                                                        <span class="text-red-500" th:errors="*{imageRight}"
+                                                              th:if="${#fields.hasErrors('imageRight')}"></span>
+                                                    </div>
+                                                    <div id="right-image-preview"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <p>Please include full 4 images of your vehicle</p>
+                                            <p>File type: .jpg , .jpeg , .png, .gif</p>
+                                        </div>
+                                        <div class="btn-group w-25 mx-auto d-flex justify-content-center gap-5">
+                                            <button class="btn cancelBtn" style="border-radius: 5px"
+                                                    type="button">Cancel
+                                            </button>
+                                            <button class="btn btn-primary nextBtn" style="border-radius: 5px"
+                                                    type="button">Next
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="tab-pane fade step" id="step3">
+                        <!-- <h4>Step 3: Pricing</h4> -->
+                        <fieldset>
+                            <div class="tab-content pricing">
+                                <div class="pricing-123sa"
+                                >
+
+                                    <div class="d-flex fs-3 justify-content-between w-75 my-5 fw-semibold">
+                                        <label for="base-price">Base price:</label>
+                                        <div>
+                                            <input class="w-25 mx-5" id="base-price" name="basePrice"
+                                                   th:field="*{basePrice}"
+                                                   type="number"/>
+                                            <span>VND/Day</span>
+                                            <p class="text-danger"
+                                               th:errors="*{basePrice}"
+                                               th:if="${#fields.hasErrors('basePrice')}"></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex fs-3 justify-content-between w-75 my-5 fw-semibold">
+                                        <label for=" -deposit"> deposit:</label>
+                                        <div>
+                                            <input class="w-25 mx-5" id=" -deposit" name="deposit"
+                                                   th:field="*{deposit}"
+                                                   type="number"/>
+                                            <span>VND</span>
+                                            <p class="text-danger" th:errors="*{deposit}"
+                                               th:if="${#fields.hasErrors('deposit')}"></p>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <p class="fw-semibold fs-3">Term of use</p>
+                                        <div class="term-of-use-sad2">
+                                            <div>
+                                                <div>
+                                                    <input id="no-smoking" name="noSmoking"
+                                                           th:field="*{noSmoking}"
+                                                           type="checkbox"/>
+                                                    <label for="no-smoking">No Smoking</label>
+                                                </div>
+                                                <div>
+                                                    <input id="no-pet" name="noPet"
+                                                           th:field="*{noPet}"
+                                                           type="checkbox"/>
+                                                    <label for="no-pet">No pet</label>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div>
+                                                    <input id="no-food-in-car" name="noFoodInCar"
+                                                           th:field="*{noFoodInCar}"
+                                                           type="checkbox"/>
+                                                    <label for="no-food-in-car">No food in car</label>
+                                                </div>
+                                                <div>
+                                                    <input id="other" name="other"
+                                                           th:field="*{other}"
+                                                           type="checkbox"/>
+                                                    <label for="other">Other</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="btn-group w-25 mx-auto d-flex justify-content-center gap-5">
+                                        <button class="btn cancelBtn" style="border-radius: 5px"
+                                                type="button">Cancel
+                                        </button>
+                                        <button class="btn btn-primary nextBtn" style="border-radius: 5px"
+                                                type="button">Next
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="tab-pane fade step" id="step4">
+                        <!-- <h4>Step 4: Finish</h4> -->
+                        <fieldset>
+                            <div class="row">
+                                <!-- Carousel Section -->
+                                <div class="col-md-6">
+                                    <div class="carousel slide w-100" data-bs-ride="carousel"
+                                         id="carouselExampleIndicators">
+                                        <!-- Carousel Indicators -->
+                                        <ol class="carousel-indicators">
+                                            <li class="active" data-bs-slide-to="0"
+                                                data-bs-target="#carouselExampleIndicators"></li>
+                                            <li data-bs-slide-to="1"
+                                                data-bs-target="#carouselExampleIndicators"></li>
+                                            <li data-bs-slide-to="2"
+                                                data-bs-target="#carouselExampleIndicators"></li>
+                                            <li data-bs-slide-to="3"
+                                                data-bs-target="#carouselExampleIndicators"></li>
+                                        </ol>
+
+                                        <!-- Carousel Inner -->
+                                        <div class="carousel-inner">
+                                            <!-- First Slide -->
+                                            <div class="carousel-item active">
+                                                <img alt="First slide"
+                                                     class="d-block w-100 carousel-image"
+                                                     id="front-img"
+                                                     src="">
+                                            </div>
+                                            <!-- Second Slide -->
+                                            <div class="carousel-item">
+                                                <img alt="Second slide"
+                                                     class="d-block w-100 carousel-image"
+                                                     id="back-img"
+                                                     src="">
+                                            </div>
+                                            <!-- Third Slide -->
+                                            <div class="carousel-item">
+                                                <img alt="Third slide"
+                                                     class="d-block w-100 carousel-image"
+                                                     id="left-img"
+                                                     src="">
+                                            </div>
+                                            <!-- Fourth Slide -->
+                                            <div class="carousel-item">
+                                                <img alt="Fourth slide"
+                                                     class="d-block w-100 carousel-image"
+                                                     id="right-img"
+                                                     src="">
+                                            </div>
+                                        </div>
+
+                                        <!-- Carousel Controls -->
+                                        <a class="carousel-control-prev" data-bs-slide="prev"
+                                           href="#carouselExampleIndicators" role="button">
+                                            <span aria-hidden="true" class="carousel-control-prev-icon"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </a>
+                                        <a class="carousel-control-next" data-bs-slide="next"
+                                           href="#carouselExampleIndicators" role="button">
+                                            <span aria-hidden="true" class="carousel-control-next-icon"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- Car Details Section -->
+                                <div class="col-md-6 mt-3">
+                                    <h4 id="title-preview"></h4>
+                                    <p><strong>Ratings:</strong>
+                                        <span class="fa fa-star"></span>
+                                        <span class="fa fa-star"></span>
+                                        <span class="fa fa-star"></span>
+                                        <span class="fa fa-star"></span>
+                                        <span class="fa fa-star"></span>
+                                        <span class="text-muted">(No ratings yet)</span>
+                                    </p>
+                                    <p><strong>No. of rides:</strong> <span id="no-of-rides-preview"></span></p>
+                                    <p><strong>Price:</strong> <span id="price-preview">k/day</span></p>
+                                    <p><strong>Locations:</strong> <span id="location-preview"></span></p>
+                                    <p><strong>Status:</strong> <span class="status-available">Available</span>
+                                    </p>
+
+                                    <button class="btn btn-secondary cancelBtn"
+                                            type="button">Cancel
+                                    </button>
+                                    <button class="btn btn-primary" id="submitBtn" type="submit">Submit</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</section>
+</body>
+
+</html>

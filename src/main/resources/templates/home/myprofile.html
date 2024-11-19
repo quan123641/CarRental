@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{shared/layouts/layout}"
+>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Home</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}"/>
+    <script type="module" th:src="@{/js/home/home.js}"></script>
+</head>
+
+<body>
+<section layout:fragment="content" class="container my-5">
+    <div class="row mb-3">
+        <div class="col">
+            <a href="/">Home</a> &gt; <a href="#">My Profile</a>
+        </div>
+    </div>
+    <h2>My Profile</h2>
+    <ul class="nav nav-tabs" id="profileTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="personal-info-tab" data-bs-toggle="tab" data-bs-target="#personal-info" type="button" role="tab">Personal Information</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="security-tab" data-bs-toggle="tab" data-bs-target="#security" type="button" role="tab">Security</button>
+        </li>
+    </ul>
+    
+    <div class="tab-content" id="profileTabContent">
+        <div class="tab-pane fade show active" id="personal-info" role="tabpanel">
+            <!-- Form starts here -->
+            <form th:action="@{/myprofile}" th:object="${userUpdateDTO}" method="post">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="fullName" class="form-label"><strong>Full Name:</strong></label>
+                        <input type="text" class="form-control" id="fullName" name="fullName" th:field="*{fullName}">
+                        <span th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" class="text-red-500"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="dateOfBirth" class="form-label"><strong> Date of Birth: </strong> </label>
+                        <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth" th:field="*{dateOfBirth}">
+                        <span th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}" class="text-red-500"></span>
+                    </div>
+                </div>
+    
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="phone" class="form-label"><strong>Phone number:</strong> <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="phone" name="phone" required th:field="*{phone}">
+                        <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="text-red-500"></span>
+                        
+                    </div>
+                    <!-- <div class="col-md-6">
+                        <label for="email" class="form-label"><strong>Email address:
+                        </strong> <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control" id="email" name="email" required >
+                    </div> -->
+                </div>
+    
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="nationalId" class="form-label"><strong>National ID No.:</strong> <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="nationalId" name="nationalId" required th:field="*{nationalId}">
+                        <span th:if="${#fields.hasErrors('nationalId')}" th:errors="*{nationalId}" class="text-red-500"></span>
+                    </div>
+                    <!-- <div class="col-md-6">
+                        <label for="drivingLicense" class="form-label"><strong>Driving license:</strong></label>
+                        <div class="input-group">
+                            <input type="file" class="form-control" id="drivingLicense" name="drivingLicense">
+                        </div>
+                    </div> -->
+                </div>
+    
+                <h3>Address</h3>
+    
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="address" class="form-label"></label>
+                        <input type="text" class="form-control" id="address" name="address" placeholder="Address" th:field="*{address}">
+                        <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="text-red-500"></span>
+                    </div>
+                </div>
+    
+                <div class="row mt-4">
+                    <div class="col text-center"> <!-- Sử dụng text-center để căn giữa -->
+                        <button type="button" class="btn btn-outline-secondary">Discard</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </form>
+            <!-- Form ends here -->
+        </div>
+    
+        <div class="tab-pane fade" id="security" role="tabpanel">
+            <h2>Change Password</h2>
+            <form th:action="@{/myprofile-updatepassword}" th:object="${userUpdatePasswordDTO}" method="post">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="password" class="form-label"><strong>New Password</strong> <span class="text-danger">*</span></label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="confirmPassword" class="form-label"><strong>Confirm Password</strong> <span class="text-danger">*</span></label>
+                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                    </div>
+                </div>
+                
+                <div class="row mt-4">
+                    <div class="col text-center">
+                        <button type="button" class="btn btn-outline-secondary">Discard</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    
+</div>
+    
+</section>
+</body>
+</html>

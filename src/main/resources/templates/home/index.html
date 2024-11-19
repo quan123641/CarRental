@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{shared/layouts/layout}"
+>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Home</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}"/>
+    <script type="module" th:src="@{/js/home/home.js}"></script>
+</head>
+
+<body>
+<section layout:fragment="content" class="text-center">
+    <div
+            class="d-flex justify-content-between align-items-center mx-auto text-light text-center bg-1"
+    >
+        <div class="col y-2">
+            <h1>Looking for a vehicle?</h1>
+            <p class="fs-1">You're at the right place</p>
+            <p class="fs-5">
+                Choose between 100's of private cars for rent at really
+                low prices!
+            </p>
+            <a th:href="@{/customer}" class="btn btn-primary">
+                Find a Rental Car Near You
+            </a>
+        </div>
+        <div class="vr"></div>
+        <div class="col">
+            <h1>Are you a car owner?</h1>
+            <p class="fs-5">
+                List your car and make money from your asset
+            </p>
+            <a th:href="@{/owner}" class="btn btn-primary">
+                Find a Rental Car Near You
+            </a>
+        </div>
+    </div>
+
+    <div class="mx-5 my-3">
+        <h1>Why us?</h1>
+        <div class="row gap-5 my-5" id="why-us-container"></div>
+    </div>
+    <div class="bg-body-secondary p-4">
+        <h1 class="my-3">What people say?</h1>
+        <div class="row row-cols-2" id="people-say-container"></div>
+    </div>
+    <div class="m-4" id="find-us-container">
+        <h1>Where to find us?</h1>
+        <div class="row" id="find-us-row"></div>
+    </div>
+</section>
+</body>
+</html>

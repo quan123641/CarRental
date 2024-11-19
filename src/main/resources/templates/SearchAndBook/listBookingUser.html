@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{shared/layouts/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <script type="module" th:src="@{/js/home/home.js}"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        .custom-padding {
+            padding-left: 15rem;
+            /* Padding bĆŖn trĆ�i */
+            padding-right: 6rem;
+            /* Padding bĆŖn phįŗ£i */
+        }
+
+        .custom-background {
+            background-color: #5f5e5e;
+            /* MĆ u nį»n xĆ�m */
+        }
+
+        .full-height {
+            height: 700px;
+            /* Chiį»u cao cį»‘ Ä‘į»‹nh */
+        }
+
+        .border-black {
+            border: 2px solid black;
+            /* Border Ä‘en */
+        }
+
+        .divCard {
+            height: 300px;
+            width: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Chiều cao của viewport */
+            position: fixed;
+            /* Để cố định modal ở giữa màn hình */
+            top: 0;
+            right: 70vb;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            /* Nền tối */
+            z-index: 1050;
+            /* Đặt z-index cao hơn để hiển thị trên modal khác */
+            /* Bắt đầu với trạng thái ẩn */
+        }
+
+        #ratingModal {
+            display: none;
+        }
+
+        .card {
+            background: white;
+            /* Nền trắng cho nội dung modal */
+            padding: 20px;
+            border-radius: 8px;
+            width: 500px;
+            /* Chiều rộng của modal */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .star {
+            font-size: 10vh;
+            cursor: pointer;
+        }
+
+        .one {
+            color: rgb(255, 0, 0);
+        }
+
+        .two {
+            color: rgb(255, 106, 0);
+        }
+
+        .three {
+            color: rgb(251, 255, 120);
+        }
+
+        .four {
+            color: rgb(255, 255, 0);
+        }
+
+        .five {
+            color: rgb(24, 159, 14);
+        }
+
+        .custom-padding {
+            padding-left: 15rem;
+            /* Padding bên trái */
+            padding-right: 6rem;
+            /* Padding bên phải */
+        }
+
+        .custom-background {
+            background-color: #5f5e5e;
+            /* Màu nền xám */
+        }
+
+        .full-height {
+            height: 700px;
+            /* Chiều cao cố định */
+        }
+
+        .border-black {
+            border: 2px solid black;
+            /* Border đen */
+        }
+
+        /* .image-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        } */
+    </style>
+</head>
+
+<body>
+    <section layout:fragment="content" class="text-center">
+        <div class="flex flex-col">
+            <div class="bg-gray-100 h-full w-screen">
+                <div class="w-full h-12 bg-white text-black flex items-center pl-16">
+                    <a href="/">Home</a> > My Booking
+                </div>
+
+            </div>
+
+            <div class="bg-white h-auto w-screen flex flex-col px-4 py-4">
+                <div class="font-bold text-6xl text-left">My Booking</div>
+                <div class="flex items-center justify-between pt-4">
+                    <div class="pl-5 text-4xl">There are <span th:text="${totalElements}"></span> Bookings that are available for you</div>                    <div class="flex items-center space-x-4 pr-16">
+                        <!--button paging-->
+                        <div class="buttons">
+                            <nav>
+                                <div class="nav nav-tabs ps-md-5" id="nav-tab" role="tablist">
+                                    <!-- Tab đầu tiên - Home với icon -->
+                                    <a class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" href="#nav-home"
+                                        role="tab" aria-controls="nav-home" aria-selected="true">
+                                        <i class="fa-solid fa-compact-disc text-4xl"></i> Detail
+                                    </a>
+
+                                    <!-- Tab thứ hai - Profile với icon -->
+                                    <a class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" href="#nav-profile"
+                                        role="tab" aria-controls="nav-profile" aria-selected="false">
+                                        <i class="fa-solid fa-list text-4xl"></i> List
+                                    </a>
+                                </div>
+                            </nav>
+                        </div>
+
+                        <div class="relative inline-block text-left">
+                            <button
+                                class="inline-flex items-center justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none">
+                                Newest to Latest
+                                <i class="ml-2 fa-solid fa-caret-down"></i>
+                            </button>
+                            <div
+                                class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden group-hover:block">
+                                <div class="py-1">
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Newest</a>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Oldest</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <div class="tab-content" id="nav-tabContent">
+                <!-- Nội dung của Tab Home -->
+                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                    <!-- Nội dung cho phần tìm kiếm -->
+                    <div id="searchContent" class="content">
+                        <div class="container-fluid">
+                            <!-- Lặp từng cặp booking: ảnh và thông tin -->
+                            <div style="max-height: 700px; overflow-y: auto;">
+                                <div th:each="carBooking, iterStat : ${carBookings}" class="row mb-10">
+                                    <!-- Ô ảnh (Carousel) -->
+                                    <div
+                                        class="col-6 full-height bg-white d-flex flex-column align-items-center justify-content-center">
+                                        <div th:id="'carouselExampleCaptions_' + ${iterStat.index}"
+                                            class="carousel slide">
+                                            <!-- Indicators -->
+                                            <div class="carousel-indicators">
+                                                <button type="button"
+                                                    th:data-bs-target="'#carouselExampleCaptions_' + ${iterStat.index}"
+                                                    th:data-bs-slide-to="0" class="active" aria-current="true"
+                                                    aria-label="Slide 1"></button>
+                                                <button type="button"
+                                                    th:data-bs-target="'#carouselExampleCaptions_' + ${iterStat.index}"
+                                                    th:data-bs-slide-to="1" aria-label="Slide 2"></button>
+                                                <button type="button"
+                                                    th:data-bs-target="'#carouselExampleCaptions_' + ${iterStat.index}"
+                                                    th:data-bs-slide-to="2" aria-label="Slide 3"></button>
+                                            </div>
+                                            <!-- Slides -->
+                                            <div class="carousel-inner">
+                                                <div class="carousel-item active">
+                                                    <img th:src="${carBooking.Car.imageBack}" class="d-block w-100"
+                                                        alt="...">
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <img th:src="${carBooking.Car.imageBack}" class="d-block w-100"
+                                                        alt="...">
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <img th:src="${carBooking.Car.imageLeft}" class="d-block w-100"
+                                                        alt="...">
+                                                </div>
+                                            </div>
+                                            <!-- Controls -->
+                                            <button class="carousel-control-prev" type="button"
+                                                th:data-bs-target="'#carouselExampleCaptions_' + ${iterStat.index}"
+                                                data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button"
+                                                th:data-bs-target="'#carouselExampleCaptions_' + ${iterStat.index}"
+                                                data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Ô thông tin -->
+                                    <div
+                                        class="col-6 full-height bg-white border-white text-white d-flex align-items-center justify-content-center">
+                                        <div class="container w-100 h-100" style="margin-top: 0px">
+                                            <table class="table w-100 h-100 text-2xl">
+                                                <thead>
+
+                                                    <tr>
+                                                        <th colspan="2" scope="col"
+                                                            class="text-center align-middle text-4xl text-black">
+                                                            <span th:text="${carBooking.Car.name}">Nissan Navara
+                                                                2017</span>
+                                                        </th>
+                                                        <th class="text-center font-bold bg-blue-600 text-white">
+
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="py-1" style="height: 50px;">
+                                                        <td class="font-bold text-1xl text-left py-1"
+                                                            style="padding-top: 2px;">
+                                                            From :
+                                                        </td>
+                                                        <td class="font-bold text-left py-1">
+                                                            <div class="flex flex-col items-center">
+                                                                <span class=" text-1xl">
+                                                                    <span class="startDate"
+                                                                        th:text="${#temporals.format(carBooking.booking.startDate, 'dd/MM/yyyy')}">13/02/2022</span>
+                                                                    -
+                                                                    <span
+                                                                        th:text="${#temporals.format(carBooking.booking.startDate, 'hh:mm a')}">12:00
+                                                                        PM</span>
+                                                                </span>
+
+                                                            </div>
+                                                        </td>
+                                                        <td class="py-1">
+
+                                                            <a th:href="@{/detail/{carId}(carId=${carBooking.Car.id})}"
+                                                                class="d-block">
+                                                                <button
+                                                                    class="bg-blue-500 text-white font-bold py-2 px-5 rounded-lg w-full">
+                                                                    <!-- Đặt width cho button -->
+                                                                    View Detail
+                                                                </button>
+                                                            </a>
+                                                        </td>
+
+                                                    </tr>
+
+                                                    <tr class="py-1" style="height: 50px;">
+                                                        <td class="font-bold text-left py-1 text-1xl"
+                                                            style="padding-top: 2px;">
+                                                            To :
+                                                        </td>
+                                                        <td class="font-bold text-left py-1">
+                                                            <div class="flex flex-col items-center">
+                                                                <span class=" text-1xl">
+                                                                    <span class="endDate"
+                                                                        th:text="${#temporals.format(carBooking.booking.endDate, 'dd/MM/yyyy')}">13/02/2022</span>
+                                                                    -
+                                                                    <span
+                                                                        th:text="${#temporals.format(carBooking.booking.endDate, 'hh:mm a')}">12:00
+                                                                        PM</span>
+                                                                </span>
+
+                                                            </div>
+                                                        </td>
+                                                        <td class="py-1">
+                                                            <form th:action="@{/confirmPickUP}" method="post">
+                                                                <!-- Trường ẩn để gửi carId và bookingId qua @RequestParam -->
+                                                                <input type="hidden" name="carId"
+                                                                    th:value="${carBooking.car.id}" />
+                                                                <input type="hidden" name="bookingId"
+                                                                    th:value="${carBooking.booking.id}" />
+
+                                                                <button
+                                                                    th:if="${carBooking.status == 'Confirm' || carBooking.status == 'deposit-pending'}"
+                                                                    type="submit"
+                                                                    class="bg-gray-800 text-white font-bold py-2 px-5 rounded-lg w-full">
+                                                                    Confirm Pick-up
+                                                                </button>
+                                                            </form>
+                                                        </td>
+
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="font-bold text-left">No of rides</td>
+                                                        <td class="font-bold text-left"
+                                                            th:text="${carBooking.Car.numOfSeats}">0
+                                                        </td>
+                                                        <td class="carId123 hidden" th:text="${carBooking.Car.id}"></td>
+                                                        <td class="bookingId123 hidden"
+                                                            th:text="${carBooking.Booking.id}"></td>
+                                                        <td>
+
+
+                                                            <form th:action="@{/cancelBooking}" method="post">
+                                                                <!-- Trường ẩn để gửi carId và bookingId qua @RequestParam -->
+                                                                <input type="hidden" name="carId"
+                                                                    th:value="${carBooking.car.id}" />
+                                                                <input type="hidden" name="bookingId"
+                                                                    th:value="${carBooking.booking.id}" />
+
+                                                                <button th:if="${carBooking.status == 'Confirm'|| carBooking.status == 'deposit-pending'}"
+                                                                    type="submit"
+                                                                    class="bg-red-500 text-white font-bold py-2 px-5 rounded-lg w-full">
+                                                                    Cancel Booking
+                                                                </button>
+                                                            </form>
+
+                                                            <button th:if="${carBooking.status == 'in-progress'}"
+                                                                id="yesButton"
+                                                                class="bg-blue-500 text-white font-bold yesButton yesButtonClass  px-5 py-2 rounded-lg w-full"
+                                                                data-toggle="modal" data-target="#returnCarModal">
+                                                                Return Car
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="font-bold text-left">Base Price</td>
+                                                        <td class="font-bold text-left basePrice  "
+                                                            th:text="${carBooking.Car.basePrice}">
+                                                            900k/day
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="font-bold text-left">Deposit</td>
+                                                        <td class="font-bold text-left deposit"
+                                                            th:text="${carBooking.Car.deposit}">
+
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="font-bold text-left">Total Price</td>
+                                                        <td class="font-bold text-left totalPrice ">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="font-bold text-left">Locations</td>
+                                                        <td class="font-bold text-left"
+                                                            th:text="${carBooking.Car.address}">Cau
+                                                            Giay,
+                                                            Ha
+                                                            Noi</td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="font-bold  text-left">Status</td>
+                                                        <td class="text-blue-500 " style="text-align: left
+                                                        ;" th:text="${carBooking.status}">
+                                                            Available</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Hàng 2 -->
+                        </div>
+                    </div>
+                </div>
+                <!-- Nội dung của Tab Profile -->
+
+            </div>
+
+
+            <div class="card-footer p-3" th:if="${totalPages == 0}">
+                <p class="text-center text-gray-700">No Car found</p>
+            </div>
+            <div class="card-footer pagination  flex justify-between items-center min-w-full" th:if="${totalPages > 0} "
+                style="width: 700px;">
+                <!-- Show select page size -->
+                <div class="flex justify-between items-center">
+                    <div>
+                        <label for="pageSize" class="block text-sm font-medium text-gray-700 mb-2">Page Size:</label>
+                        <select id="pageSize" name="pageSize" class="p-2 border border-slate-300 rounded-md"
+                            onchange="window.location.href = '/listBookingUser?page=0&size=' + this.value">
+                            <option th:each="size : ${pageSizes}" th:value="${size}" th:text="${size}"
+                                th:selected="${size == pageSize}"></option>
+                        </select>
+
+                    </div>
+                </div>
+                <ul class="pagination-step flex justify-center items-center gap-2">
+                    <!-- Previous Page -->
+                    <li>
+                        <a class="p-3" th:href="@{/listBookingUser(page=${currentPage - 1}, size=${pageSize})}"
+                            th:classappend="${currentPage == 0} ? 'pointer-events-none text-slate-300' : ''">
+                            <i class="fa-solid fa-angle-left"></i>
+                        </a>
+                    </li>
+
+                    <!-- Page Numbers -->
+                    <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1 < 0 ? 0 : totalPages - 1)}">
+                        <a class="p-3" th:href="@{/listBookingUser(  page=${pageNum}, size=${pageSize})}"
+                            th:classappend="${pageNum == currentPage} ? 'inline-block text-center bg-blue-700 rounded-full w-12 h-12 text-white' : ''">
+                            <span th:text="${pageNum + 1}"></span>
+                        </a>
+                    </li>
+
+                    <!-- Next Page - Disabled if currentPage is the last page -->
+                    <li>
+                        <a class="p-3" th:href="@{/search(order=${order}, page=${currentPage + 1}, size=${pageSize})}"
+                            th:classappend="${currentPage == totalPages - 1} ? 'pointer-events-none text-slate-300' : ''">
+                            <i class="fa-solid fa-angle-right"></i>
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Show item 0-100 of 1000 -->
+                <div class="flex justify-center items-center gap-2">
+                    <span class="text-sm text-gray-700"
+                        th:text="|Show ${(currentPage * pageSize + 1) > totalElements ? totalElements : (currentPage * pageSize + 1)} - ${(currentPage + 1) * pageSize > totalElements ? totalElements : (currentPage + 1) * pageSize} of ${totalElements}|">
+                    </span>
+                </div>
+            </div>
+
+        </div>
+        <!-- Modal cho deposit lớn hơn total -->
+        <div class="modal fade" id="depositGreaterModal" tabindex="-1" role="dialog"
+            aria-labelledby="depositGreaterModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="depositGreaterModalLabel">Deposit Greater</h5>
+                        <button onclick="closeModal('#depositLessModal')" type="button" class="close"
+                            data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Your deposit is greater than the total amount.</p>
+                        <p>The remaining amount will be credited back to your wallet.</p>
+                        <p id="remainingAmountGreater"></p>
+                    </div>
+                    <div class="flex justify-between">
+                        <div class="modal-footer">
+                            <button type="button" id="confirmPaymentDepositGreaterTotal123" class="btn btn-secondary"
+                                data-dismiss="modal">Yes</button>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" onclick="closeModal('#depositGreaterModal')"
+                                class="btn btn-secondary " data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal cho deposit nhỏ hơn total -->
+        <div class="modal fade" id="depositLessModal" tabindex="-1" role="dialog"
+            aria-labelledby="depositLessModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="depositLessModalLabel">Deposit Less</h5>
+                        <button type="button" class="close" onclick="closeModal('#depositLessModal')"
+                            aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Your deposit is less than the total amount.</p>
+                        <p>Please pay the remaining amount to complete the return.</p>
+                        <p id="remainingAmountLess"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="confirmPaymentDepositLessTotal123" type="button" class="btn btn-secondary"
+                            data-dismiss="modal"> Confirm</button>
+                        <button type="button" onclick="closeModal('#depositLessModal')" class="btn btn-secondary"
+                            data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Rating Modal -->
+        <div class="divCard " id="ratingModal">
+            <div class="card">
+                <h1>Feedback Ratings</h1>
+                <br />
+                <div>
+                    <span class="star" data-value="1">&#9733;</span>
+                    <span class="star" data-value="2">&#9733;</span>
+                    <span class="star" data-value="3">&#9733;</span>
+                    <span class="star" data-value="4">&#9733;</span>
+                    <span class="star" data-value="5">&#9733;</span>
+                </div>
+                <br />
+                <textarea class="borer border-black rounded-lg" id="content" placeholder="Leave your comment..."
+                    rows="4" cols="50"></textarea>
+                <br />
+                <div class="flex justify-between">
+                    <button id="submitRating" type="submit" class="bg-blue-500 rounded-lg h-12 w-24">Submit
+                        Rating</button>
+                    <button class="bg-red-500 rounded-lg h-12 w-24" onclick="closeModalRating('#ratingModal')">
+                        Skip</button>
+                </div>
+                <h3 id="output">Rating is: 0/5</h3>
+            </div>
+        </div>
+
+
+
+        <script>
+            let carId = null;  // Biến toàn cục
+            let bookingId = null;  // Biến toàn cục
+
+            document.querySelectorAll('.yesButton').forEach(button => {
+                button.onclick = function () {
+                    // Lấy giá trị deposit và total từ thuộc tính data của nút được nhấn
+                    const depositText = parseFloat(this.getAttribute("data-deposit")); // Lấy giá trị deposit
+                    const totalText = parseFloat(this.getAttribute("data-total"));
+                    carId = this.getAttribute("data-car-id");  // Gán giá trị cho biến toàn cục
+                    bookingId = this.getAttribute("data-booking-id");  // Gán giá trị cho biến toàn cục
+
+                    // Lấy giá trị total
+                    console.log("Deposit Text:", depositText);
+                    console.log("Total Text:", totalText);
+                    console.log("Selected carId:", carId, "Selected bookingId:", bookingId);  // Log cho kiểm tra
+
+                    const deposit = parseFloat(depositText); // Chuyển đổi thành số
+                    const total = parseFloat(totalText);
+                    if (deposit > total) {
+                        $('#returnCarModal').modal('hide'); // Ẩn modal ban đầu
+                        $('#depositGreaterModal').modal('show'); // Hiện modal cho deposit lớn hơn total
+                        const remainingAmount = deposit - total;
+                        document.getElementById('remainingAmountGreater').innerText = `You have ${remainingAmount.toLocaleString('vi-VN')} VND remaining.`;
+                    } else {
+                        $('#returnCarModal').modal('hide'); // Ẩn modal ban đầu
+                        $('#depositLessModal').modal('show'); // Hiện modal cho deposit nhỏ hơn total
+                        const remainingAmount = total - deposit;
+                        document.getElementById('remainingAmountLess').innerText = `You have ${remainingAmount.toLocaleString('vi-VN')} VND remaining.`;
+                    }
+                };
+            });
+
+            $(document).ready(function () {
+                $('#confirmPaymentDepositLessTotal123').click(function () {
+                    console.log('Yes button clicked');
+                    console.log('Selected carId:', carId, 'Selected bookingId:', bookingId);
+
+                    // Kiểm tra giá trị carId và bookingId trước khi gửi AJAX
+                    if (!carId || !bookingId) {
+                        alert("Car ID or Booking ID is missing!");
+                        return; // Dừng hàm nếu không có ID
+                    }
+
+                    $.ajax({
+                        url: '/processPayment',
+                        type: 'POST',
+                        data: {
+                            carId: carId,
+                            bookingId: bookingId
+                        },
+                        success: function (response) {
+                            if (response === 'success') {
+                                // Ẩn modal tính toán
+                                $('#depositLessModal').modal('hide');
+                                // Hiển thị modal đánh giá
+                                $('#ratingModal').modal('show');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("AJAX Error: ", error);
+                            alert("An error occurred: " + error);
+                        }
+                    }); // Kết thúc phần gọi AJAX
+                }); // Kết thúc hàm click
+
+                $('#confirmPaymentDepositGreaterTotal123').click(function () {
+                    console.log('Yes button clicked');
+                    console.log('Selected carId:', carId, 'Selected bookingId:', bookingId);
+
+                    // Kiểm tra giá trị carId và bookingId trước khi gửi AJAX
+                    if (!carId || !bookingId) {
+                        alert("Car ID or Booking ID is missing!");
+                        return; // Dừng hàm nếu không có ID
+                    }
+                    debugger;
+                    $.ajax({
+                        url: '/processPayment',
+                        type: 'POST',
+                        data: {
+                            carId: carId,
+                            bookingId: bookingId
+                        },
+                        success: function (response) {
+                            if (response === 'success') {
+                                // Ẩn modal tính toán
+                                $('#depositLessModal').modal('hide');
+                                $('#depositGreaterModal').modal('hide');
+
+                                // Hiển thị modal đánh giá
+                                $('#ratingModal').modal('show');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("AJAX Error: ", error);
+                            alert("An error occurred: " + error);
+                        }
+                    }); // Kết thúc phần gọi AJAX
+                }); // Kết thúc hàm click
+
+
+            });
+            document.addEventListener('DOMContentLoaded', function () {
+                let selectedRating = 0;
+
+                // Lấy tất cả các ngôi sao
+                const stars = document.querySelectorAll('.star');
+                stars.forEach(star => {
+                    star.addEventListener('click', function () {
+                        selectedRating = this.getAttribute('data-value'); // Lấy giá trị rating từ thuộc tính data-value
+                        updateStars(selectedRating);
+                    });
+                });
+
+                // Cập nhật màu sắc của các ngôi sao
+                function updateStars(rating) {
+                    stars.forEach((star, index) => {
+                        star.classList.remove('one', 'two', 'three', 'four', 'five'); // Xóa lớp trước đó
+                        if (index < rating) {
+                            star.classList.add(getClassForRating(index + 1));
+                        }
+                    });
+                    document.getElementById('output').innerText = "Rating is: " + rating + "/5";
+                }
+
+                // Lấy lớp màu sắc tương ứng với rating
+                function getClassForRating(rating) {
+                    switch (rating) {
+                        case 1: return 'one';
+                        case 2: return 'two';
+                        case 3: return 'three';
+                        case 4: return 'four';
+                        case 5: return 'five';
+                        default: return '';
+                    }
+                }
+                debugger;
+                // Xử lý sự kiện nhấn nút Submit
+                document.getElementById('submitRating').addEventListener('click', function () {
+                    let comment = document.getElementById('content').value.trim();
+
+
+                    console.log('Selected carId:', carId,
+                        'Selected bookingId:', bookingId, 'rating', selectedRating, 'content', comment);
+                    debugger;
+                    $.ajax({
+                        url: '/submitRating',
+                        type: 'POST',
+                        data: {
+                            carId: carId,
+                            bookingId: bookingId,
+                            rating: selectedRating,
+                            content: comment
+                        },
+                        success: function () {
+                            alert("Rating submitted successfully 123");
+
+                            // Reset rating và comment sau khi gửi
+                            selectedRating = 0;
+                            document.getElementById('content').value = '';
+                            updateStars(0); // Reset ngôi sao về mặc định
+                            closeModalRating('#ratingModal'); // Đóng modal
+                            location.reload();
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("AJAX Error: ", error);
+                            alert("Failed to submit rating.");
+                        }
+                    });
+                });
+
+                // Xử lý sự kiện double-click để xóa hết sao
+                stars.forEach(star => {
+                    star.addEventListener('dblclick', function () {
+                        selectedRating = 0; // Reset rating về 0
+                        updateStars(selectedRating); // Cập nhật lại giao diện
+                    });
+                });
+            });
+
+
+            function closeModalRating(id) {
+                $(id).modal('hide');
+            }
+
+            function closeModal(modalId) {
+                $(modalId).modal('hide');
+            }
+        </script>
+
+
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+
+        </script>
+        <script>
+            // Hàm tính số ngày giữa hai ngày cho từng phần tử
+            function calculateTotalPrice() {
+
+                // Lấy tất cả các phần tử startDate, endDate, basePrice
+                const startDates = document.querySelectorAll(".startDate");
+                const endDates = document.querySelectorAll(".endDate");
+                const basePrices = document.querySelectorAll(".basePrice");
+                const totalPrices = document.querySelectorAll(".totalPrice");
+                const deposits = document.querySelectorAll(".deposit");
+                const carId = document.querySelectorAll(".carId123");
+                const bookingId = document.querySelectorAll(".bookingId123");
+                const yesButton = document.querySelectorAll(".yesButtonClass");
+
+                // Lặp qua tất cả các phần tử đã lấy
+                startDates.forEach((startDateElement, index) => {
+                    const startDateText = startDateElement.innerText.trim();
+                    const endDateText = endDates[index].innerText.trim();
+                    const basePriceText = basePrices[index].innerText.trim();
+
+                    // Chuyển đổi định dạng "dd/mm/yyyy" sang Date
+                    const startDateParts = startDateText.split("/");
+                    const endDateParts = endDateText.split("/");
+
+                    const startDate = new Date(startDateParts[2], startDateParts[1] - 1, startDateParts[0]);
+                    const endDate = new Date(endDateParts[2], endDateParts[1] - 1, endDateParts[0]);
+
+                    const basePrice = parseFloat(basePriceText);
+                    const deposit = parseFloat(deposits[index].innerText.trim());
+
+                    if (isNaN(basePrice)) {
+                        console.error("Base Price is not a valid number for item " + index);
+                        totalPrices[index].innerText = "Invalid Base Price";
+                        return;
+                    }
+
+                    // Kiểm tra xem ngày có hợp lệ không
+                    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+                        console.error("Invalid date format for item " + index);
+                        totalPrices[index].innerText = "Invalid Date Format";
+                        return;
+                    }
+
+                    // Tính khoảng thời gian giữa hai ngày
+                    const timeDifference = endDate.getTime() - startDate.getTime();
+                    const daysBetween = timeDifference / (1000 * 3600 * 24);
+
+                    if (daysBetween <= 0) {
+                        console.error("End date must be after start date for item " + index);
+                        totalPrices[index].innerText = "Invalid Date Range";
+                        return;
+                    }
+
+                    // Tính tổng giá
+                    const totalPrice = daysBetween * basePrice;
+                    totalPrices[index].innerText = totalPrice.toLocaleString('vi-VN') + " VND"; // Hiển thị với định dạng VN
+
+                    // Thiết lập các thuộc tính dữ liệu cho nút yesButton
+                    yesButton[index].setAttribute("data-total", totalPrice);
+                    yesButton[index].setAttribute("data-deposit", deposit);
+                    yesButton[index].setAttribute("data-car-id", carId[index].innerText.trim());
+                    yesButton[index].setAttribute("data-booking-id", bookingId[index].innerText.trim());
+                });
+            }
+            window.onload = function () {
+                calculateTotalPrice();
+            };
+
+        </script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- pass date and time to url of button rentnow-->
+
+    </section>
+</body>
+
+</html>

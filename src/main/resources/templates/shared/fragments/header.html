@@ -1,0 +1,46 @@
+<header class="main-navigation bg-1 px-3" layout:fragment="header" xmlns:sec="http://www.w3.org/1999/xhtml">
+    <ul class="list-unstyled row justify-content-between mb-0 border-bottom mx-2">
+        <li class="px-2 col-7">
+            <a class="d-flex gap-3 align-items-center text-light text-decoration-none fs-1" th:href="@{/}">
+                <i class="fa-solid fa-car"></i>
+                <p>Rent a car today!</p>
+            </a>
+        </li>
+        <li class="border-end border-start col-2 fs-5 d-flex align-items-center justify-content-center">
+            <a class="text-light text-decoration-none" th:href="@{/about}">ABOUT US</a>
+        </li>
+        <!--         Hiển thị khi người dùng chưa đăng nhập-->
+        <li class="col-2 fs-5 d-flex align-items-center justify-content-center gap-3" sec:authorize="isAnonymous()">
+            <a th:href="@{/auth/login}" class="text-light text-decoration-none border-end px-2">
+                <i class="fa-solid fa-circle-user"></i>
+                <span>SIGN UP</span>
+            </a>
+            <a th:href="@{/auth/login}" class="text-light text-decoration-none">
+                LOG IN
+            </a>
+        </li>
+        <li id="show-menu" class="col-2 fs-5 d-flex align-items-center justify-content-center gap-3"
+            sec:authorize="isAuthenticated()">
+            <p class="text-light mb-0">
+                Wellcome,
+                <span sec:authentication="name" th:text="${#authentication.principal.name}"></span>
+                <span><i class="fa-solid fa-sort-down"></i></span>
+            </p>
+            <div class="mini-action-123 ">
+                <ul class="list-unstyled px-2">
+                    <li><a class="text-decoration-none" href="/myprofile">My Profile</a></li>
+                    <li><a class="text-decoration-none" href="/listBookingUser">My Bookings</a></li>
+                    <li><a class="text-decoration-none" href="/mywallet">My Wallet</a></li>
+                    <li id="logout" class="border-top border-black">
+                        <a class="text-decoration-none"
+                           href="">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+
+    <div class="overlay"></div>
+
+
+</header>

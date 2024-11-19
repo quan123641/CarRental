@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{shared/layouts/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <script type="module" th:src="@{/js/home/home.js}"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        .custom-padding {
+            padding-left: 15rem;
+            /* Padding bên trái */
+            padding-right: 6rem;
+            /* Padding bên phải */
+        }
+
+        .custom-background {
+            background-color: #5f5e5e;
+            /* Màu nền xám */
+        }
+
+        .full-height {
+            height: 500px;
+            /* Chiều cao cố định */
+        }
+
+        .border-black {
+            border: 2px solid black;
+            /* Border đen */
+        }
+
+        /* .image-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        } */
+    </style>
+</head>
+
+<body>
+    <section layout:fragment="content" class="text-center">
+        <div class="flex flex-col">
+            <div class="bg-gray-100 h-full w-screen">
+                <div class="w-full h-12 bg-white text-black flex items-center pl-16">
+                    <a href="#">Home</a> > My report
+                </div>
+                <div class="w-full h-auto bg-gray-100 flex flex-col items-center">
+                    <form class="custom-background flex flex-col w-full custom-padding space-y-8 py-5 " method="GET"
+                        th:action="@{/search}">
+                        <!-- Form input fields -->
+                        <div class="mb-4 text-left">
+                            <label for="pickup-location" class="block text-lg text-white font-bold mb-1 ">Pick Up
+                                Location</label>
+                            <input type="text" id="pickup-location" name="pickupLocation"
+                                style="width: 700px !important;"
+                                class="border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                placeholder="Pick-up location">
+
+                        </div>
+
+                        <div class="flex space-x-4 w-full">
+                            <div class="mb-4 flex-grow">
+                                <label class="block text-white font-bold mb-1 text-lg text-left">Pick Up Date and
+                                    Time</label>
+                                <div class="flex space-x-2">
+                                    <input type="date" id="startDate" name="startDate"
+                                        class="w-1/2 border rounded py-2 px-3 text-gray-700">
+                                    <input type="time" id="startTime" name="startTime"
+                                        class="w-1/4 border rounded py-2 px-3 text-gray-700">
+                                </div>
+                            </div>
+
+                            <div class="mb-4 flex-grow">
+                                <label class="block text-white font-bold mb-1 text-lg text-left">Drop Off Date and
+                                    Time</label>
+                                <div class="flex space-x-2">
+                                    <input type="date" id="endDate" name="endDate"
+                                        class="w-1/2 border rounded py-2 px-3 text-gray-700">
+                                    <input type="time" id="endTime" name="endTime"
+                                        class="w-1/4 border rounded py-2 px-3 text-gray-700">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center mt-4">
+                            <button type="submit"
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-1/4">Search</button>
+                        </div>
+                        <p id="errorMessage" class="text-red-500"></p>
+                    </form>
+                </div>
+            </div>
+
+            <div class="bg-white h-auto w-screen flex flex-col px-4 py-4">
+                <div class="font-bold text-6xl text-left">My Feedback</div>
+                <div class="flex items-center justify-between pt-4">
+                    <div class="pl-5 font-bold text-4xl">Average Ratings</div>
+                    <div class="flex items-center space-x-4 pr-16">
+                        <!--button paging-->
+                        <div class="buttons">
+                            <nav>
+                                <div class="nav nav-tabs ps-md-5" id="nav-tab" role="tablist">
+                                    <!-- Tab đầu tiên - Home với icon -->
+                                    <a class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" href="#nav-home"
+                                        role="tab" aria-controls="nav-home" aria-selected="true">
+                                        <i class="fa-solid fa-compact-disc text-4xl"></i> Detail
+                                    </a>
+
+                                    <!-- Tab thứ hai - Profile với icon -->
+                                    <a class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" href="#nav-profile"
+                                        role="tab" aria-controls="nav-profile" aria-selected="false">
+                                        <i class="fa-solid fa-list text-4xl"></i> List
+                                    </a>
+                                </div>
+                            </nav>
+                        </div>
+
+                        <div class="relative inline-block text-left">
+                            <button
+                                class="inline-flex items-center justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none">
+                                Newest to Latest
+                                <i class="ml-2 fa-solid fa-caret-down"></i>
+                            </button>
+                            <div
+                                class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden group-hover:block">
+                                <div class="py-1">
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Newest</a>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Oldest</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <div class="tab-content" id="nav-tabContent">
+                <!-- Nội dung của Tab Home -->
+                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                    <!-- Nội dung cho phần tìm kiếm -->
+                    <div id="searchContent" class="content">
+                        <div class="container-fluid">
+                            <!-- Lặp từng cặp booking: ảnh và thông tin -->
+                            <div style="max-height: 700px; overflow-y: auto;">
+                                <div th:each="car, iterStat : ${cars}" class="row mb-10">
+                                    <!-- Ô ảnh (Carousel) -->
+                                    <div
+                                        class="col-6 full-height bg-white d-flex flex-column align-items-center justify-content-center">
+                                        <div th:id="'carouselExampleCaptions_' + ${iterStat.index}"
+                                            class="carousel slide">
+                                            <!-- Indicators -->
+                                            <div class="carousel-indicators">
+                                                <button type="button"
+                                                    th:data-bs-target="'#carouselExampleCaptions_' + ${iterStat.index}"
+                                                    th:data-bs-slide-to="0" class="active" aria-current="true"
+                                                    aria-label="Slide 1"></button>
+                                                <button type="button"
+                                                    th:data-bs-target="'#carouselExampleCaptions_' + ${iterStat.index}"
+                                                    th:data-bs-slide-to="1" aria-label="Slide 2"></button>
+                                                <button type="button"
+                                                    th:data-bs-target="'#carouselExampleCaptions_' + ${iterStat.index}"
+                                                    th:data-bs-slide-to="2" aria-label="Slide 3"></button>
+                                            </div>
+                                            <!-- Slides -->
+                                            <div class="carousel-inner">
+                                                <div class="carousel-item active">
+                                                    <img th:src="${car.imageBack}" class="d-block w-100" alt="...">
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <img th:src="${car.imageBack}" class="d-block w-100" alt="...">
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <img th:src="${car.imageLeft}" class="d-block w-100" alt="...">
+                                                </div>
+                                            </div>
+                                            <!-- Controls -->
+                                            <button class="carousel-control-prev" type="button"
+                                                th:data-bs-target="'#carouselExampleCaptions_' + ${iterStat.index}"
+                                                data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button"
+                                                th:data-bs-target="'#carouselExampleCaptions_' + ${iterStat.index}"
+                                                data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Ô thông tin -->
+                                    <div
+                                        class="col-6 full-height bg-white border-white text-white d-flex align-items-center justify-content-center">
+                                        <div class="container w-100 h-100" style="margin-top: 0px">
+                                            <table class="table w-100 h-100 text-2xl">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="2" scope="col"
+                                                            class="text-center align-middle text-4xl text-black">
+                                                            <span th:text="${car.name}">Nissan Navara
+                                                                2017</span>
+                                                        </th>
+                                                        <th class="text-center font-bold bg-blue-600 text-white">
+                                                            <button type="button" th:data-car-id="${car.id}"
+                                                                onclick="handleRentNow(this)"
+                                                                class="bg-green-500 text-white font-bold py-2 px-5 rounded-lg w-full">
+                                                                Rent Now
+                                                            </button>
+                                                            <a id="rentNowLink" href="#" class="hidden"></a>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="py-1" style="height: 50px;">
+                                                        <td class="font-bold text-left py-1" style="padding-top: 2px;">
+                                                            Ratings
+                                                        </td>
+                                                        <td class="font-bold text-left py-1">
+                                                            <div class="flex flex-col items-center">
+                                                                <span class="text-yellow-400 text-3xl">★ ★ ★ ★ ★</span>
+                                                                <p class="text-gray-400 text-sm mt-1">(no rating yet)
+                                                                </p>
+                                                            </div>
+                                                        </td>
+                                                        <td class="py-1">
+
+                                                            <a th:href="@{/detail/{carId}(carId=${car.id})}"
+                                                                class="d-block">
+                                                                <button
+                                                                    class="bg-blue-500 text-white font-bold py-2 px-5 rounded-lg w-full">
+                                                                    <!-- Đặt width cho button -->
+                                                                    View Detail
+                                                                </button>
+                                                            </a>
+                                                        </td>
+
+                                                    </tr>
+
+
+                                                    <tr>
+                                                        <td class="font-bold text-left">No of rides</td>
+                                                        <td class="font-bold text-left" th:text="${car.numOfSeats}">0
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="font-bold text-left">Price</td>
+                                                        <td class="font-bold text-left" th:text="${car.basePrice}">
+                                                            900k/day
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="font-bold text-left">Locations</td>
+                                                        <td class="font-bold text-left" th:text="${car.address}">Cau
+                                                            Giay,
+                                                            Ha
+                                                            Noi</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="font-bold  text-left">Status</td>
+                                                        <td class="text-blue-500 text-center text-left">
+                                                            Available</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Hàng 2 -->
+                        </div>
+                    </div>
+                </div>
+                <!-- Nội dung của Tab Profile -->
+                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                    <div id="listCarContent" class="content">
+                        <div class="flex flex-col">
+                            <div class="container mt-5 tabel-reponsive ">
+                                <table class="table  fw-bold   border-black table-hover h-50">
+                                    <thead class="table-secondary" style="background-color:red">
+                                        <tr>
+                                            <th class="px-5">No</th>
+                                            <th>name</th>
+                                            <th>image-container</th>
+                                            <th>Ratings</th>
+                                            <th>No of RIdes</th>
+                                            <th> Price</th>
+                                            <th>Location</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-center">
+                                        <tr th:each="car, iterStat : ${cars}">
+                                            <td class="align-middle" th:text="${iterStat.index + 1}"></td>
+                                            <td class="align-middle text-center" th:text="${car.name}">Car</td>
+                                            <td class="flex justify-center "><img th:src="${car.imageFront}"
+                                                    alt="image"></td>
+                                            <td class="align-middle text-center">4.5</td>
+                                            <td class="align-middle text-center" th:text="${car.numOfSeats}">10
+                                            </td>
+                                            <td class="align-middle text-center" th:text="${car.basePrice}">$100
+                                            </td>
+                                            <td class="align-middle text-center" th:text="${car.address}">New
+                                                York</td>
+                                            <td class="align-middle text-center">available
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                <div class="flex flex-col">
+                                                    <button
+                                                        class="btn btn-outline-dark bg-blue-500 text-white font-bold py-1 px-1 rounded-lg">
+                                                        Rent Now
+                                                    </button>
+                                                    <button
+                                                        class="btn btn-outline-dark  mt-2 bg-blue-500 text-white font-bold py-1 px-1 rounded-lg">View
+                                                        Detail</button>
+                                                </div>
+                                            </td>
+
+
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="card-footer p-3" th:if="${totalPages == 0}">
+                <p class="text-center text-gray-700">No Car found</p>
+            </div>
+            <div class="card-footer pagination  flex justify-between items-center" th:if="${totalPages > 0} "
+                style="padding: right 20px !important;padding-left: 20px!important;">
+                <!-- Show select page size -->
+                <div class="flex justify-between items-center">
+                    <div>
+                        <label for="pageSize" class="block text-sm font-medium text-gray-700 mb-2">Page Size:</label>
+                        <select id="pageSize" name="pageSize" class="p-2 border border-slate-300 rounded-md"
+                            onchange="window.location.href =
+                             '/search?pickupLocation=' + document.getElementById('pickup-location').value + '&page=0&size=' + this.value">
+                            <option th:each="size : ${pageSizes}" th:value="${size}" th:text="${size}"
+                                th:selected="${size == pageSize}"></option>
+                        </select>
+                    </div>
+                </div>
+                <ul class="pagination-step flex justify-center items-center gap-2">
+                    <!-- Previous Page -->
+                    <li>
+                        <a class="p-3"
+                            th:href="@{/search(pickupLocation=${pickupLocation}, page=${currentPage - 1}, size=${pageSize})}"
+                            th:classappend="${currentPage == 0} ? 'pointer-events-none text-slate-300' : ''">
+                            <i class="fa-solid fa-angle-left"></i>
+                        </a>
+                    </li>
+
+                    <!-- Page Numbers -->
+                    <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1 < 0 ? 0 : totalPages - 1)}">
+                        <a class="p-3"
+                            th:href="@{/search(pickupLocation=${pickupLocation}, sort=${sort}, order=${order}, page=${pageNum}, size=${pageSize})}"
+                            th:classappend="${pageNum == currentPage} ? 'inline-block text-center bg-blue-700 rounded-full w-12 h-12 text-white' : ''">
+                            <span th:text="${pageNum + 1}"></span>
+                        </a>
+                    </li>
+
+                    <!-- Next Page - Disabled if currentPage is the last page -->
+                    <li>
+                        <a class="p-3"
+                            th:href="@{/search(pickupLocation=${pickupLocation}, sort=${sort}, order=${order}, page=${currentPage + 1}, size=${pageSize})}"
+                            th:classappend="${currentPage == totalPages - 1} ? 'pointer-events-none text-slate-300' : ''">
+                            <i class="fa-solid fa-angle-right"></i>
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Show item 0-100 of 1000 -->
+                <div class="flex justify-center items-center gap-2">
+                    <span class="text-sm text-gray-700"
+                        th:text="|Show ${currentPage * pageSize + 1}-${(currentPage + 1) * pageSize} of ${totalElements}|">
+                    </span>
+                </div>
+            </div>
+
+        </div>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- pass date and time to url of button rentnow-->
+        <script>
+            function handleRentNow(buttonElement) {
+                // Lấy giá trị carId từ thẻ button (hoặc bạn có thể lấy từ bất kỳ thẻ nào khác)
+                const carId = buttonElement.getAttribute('data-car-id');
+
+                // Lấy giá trị từ input date và time
+                const startDate = document.getElementById('startDate').value;
+                const startTime = document.getElementById('startTime').value;
+                const endDate = document.getElementById('endDate').value;
+                const endTime = document.getElementById('endTime').value;
+
+                // Kiểm tra xem tất cả các giá trị đã được nhập đầy đủ
+                if (!startDate || !startTime || !endDate || !endTime) {
+                    alert("Please enter all date and time fields.");
+                    return;
+                }
+
+                // Hợp nhất start date và start time thành định dạng ISO 8601
+                const startDateTime = `${startDate}T${startTime}`;
+                const endDateTime = `${endDate}T${endTime}`;
+
+                // Lấy thẻ a và gán giá trị cho href, truyền vào carId
+                const rentNowLink = document.getElementById('rentNowLink');
+
+                if (rentNowLink) {
+                    // Cập nhật đường link với carId và các tham số ngày giờ
+                    rentNowLink.href = `/bookingInformation/${carId}?startDateTime=${encodeURIComponent(startDateTime)}&endDateTime=${encodeURIComponent(endDateTime)}`;
+                    // Thực hiện click vào link để chuyển hướng
+                    rentNowLink.click();
+                } else {
+                    console.error("Link element not found!");
+                }
+            }
+
+        </script>
+
+
+    </section>
+</body>
+
+</html>

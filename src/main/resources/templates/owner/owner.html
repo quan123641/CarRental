@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{shared/layouts/layout}"
+>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Owner Home</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}"/>
+    <link rel="stylesheet" th:href="@{/css/owner.css}"/>
+    <script type="module" th:src="@{/js/home/home.js}"></script>
+    <script type="module" th:src="@{/js/owner/owner.js}"></script>
+</head>
+
+<body>
+<section layout:fragment="content">
+    <div class="bg-body-secondary my-1 px-4 pb-5">
+        <h1 class="pt-5 fw-bold">
+            Have a car for rent? Don't miss out of your benefit
+        </h1>
+        <div class="row row-cols-3 mt-3" id="cardContainer"></div>
+    </div>
+    <div class="m-4">
+        <h1 class="my-3 fw-bold">Make money on your car right away</h1>
+        <div class="text-center">
+            <a href="/car/list" class="btn btn-primary my-3 py-3 w-25 border border-dark rounded">
+                List Your Car Today
+            </a>
+        </div>
+    </div>
+</section>
+</body>
+</html>
+
